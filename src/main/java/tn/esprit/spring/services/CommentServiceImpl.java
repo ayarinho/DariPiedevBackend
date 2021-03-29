@@ -3,22 +3,34 @@ package tn.esprit.spring.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Comment;
+import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.CommentRepository;
+import tn.esprit.spring.repository.UserRepository;
 
-public class CommentServiceImpl  implements ICommentService{
+@Service
+public class CommentServiceImpl  implements IcommentService{
 
 	@Autowired
 	CommentRepository  commentrepository;
+	@Autowired
+	UserRepository  userRepository  ;
 	
 	
-	@Override
-	public Comment AddComment(Comment comment) {
+	public Comment AddComment(Comment comment,long idUser) {
+		
+	      User  user= userRepository.findById(idUser).get();
+		 
+		 comment.setUserId(user);
+		
 		commentrepository.save(comment);	
 	
 		return comment;
 	}
+	
+
 	
 	
 	@Override
@@ -26,6 +38,16 @@ public class CommentServiceImpl  implements ICommentService{
 		List<Comment> comments=(List<Comment>) commentrepository.findAll();
 		return comments;	
 		}
+	
+	
+	@Override
+	public Comment retrieveCommentById(Long id) {
+	Comment comment= commentrepository.findById(id).get();
+		 
+		
+		return comment;	
+		}
+	
 
 	@Override
 	public Comment updateComment(Comment comment) {
@@ -34,8 +56,8 @@ public class CommentServiceImpl  implements ICommentService{
 	}
 
 	@Override
-	public void deleteComment(int IdComment) {
-		commentrepository.deleteById((long) IdComment);
+	public void deleteComment(Long IdComment) {
+		commentrepository.deleteById(IdComment);
 	}
 
 	

@@ -6,6 +6,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.UserRepository;
 
@@ -18,7 +22,14 @@ public class NotificationServeur {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-	CryptWithMD5 cryptWithMD5;
+	CryptWithSHA256 cryptWitSHA256;
+	
+
+
+	private final static String ACCOUNT_SID = "AC36259bd614d31cc9c7f3f6c4ab15a939";
+	private final static String AUTH_ID = "06020df39db37aa41b42d53ec9c8aefd";
+   
+
 	
 	public NotificationServeur(JavaMailSender javaMAilSender) {
 		this.javaMailSender = javaMailSender;
@@ -39,11 +50,13 @@ public class NotificationServeur {
 		System.out.println("nchouff "+password);
 		
 		String randomSymbol=randomCharacter("$£@@@");
+		
 		password = insertAtRandom(password, randomSymbol);
 		
 		
 		String pass=password;
-		String cryptePassword=cryptWithMD5.cryptWithMD5(pass);
+		
+		String cryptePassword=cryptWitSHA256.cryptWithSHA256(pass);
 		
 		System.out.println("avant base de donne "+cryptePassword);
 		
@@ -54,6 +67,15 @@ public class NotificationServeur {
 		System.out.println("base de donne "+user.getPassword());
 		
 		System.out.println(pass);
+		
+		//sending sms
+		
+		
+		 Twilio.init(ACCOUNT_SID,AUTH_ID);
+			
+		 Message message = Message.creator(new PhoneNumber(user.getPhoneNumber()),
+				 new PhoneNumber("+17378885488"),pass).create();
+		
 		//sending email
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
@@ -63,6 +85,7 @@ public class NotificationServeur {
 		javaMailSender.send(mail);
 		System.out.println("apres mail"+user.getPassword());
 	}
+	
 	public static String randomCharacter(String charachter) {
 		int n = charachter.length();
 		int r = (int)(n*Math.random());

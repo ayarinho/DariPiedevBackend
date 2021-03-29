@@ -5,8 +5,12 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import tn.esprit.spring.entities.Comment;
 
+
+@Repository
 public  interface CommentRepository extends CrudRepository<Comment, Long>{ 
 	/*@Query("SELECT count(*) FROM Comment c where c.Ads=:idad")
     public int countCommentsJPQL(@Param("idad")int IdAd);

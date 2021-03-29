@@ -8,9 +8,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,9 +29,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="User")
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User implements Serializable {
-	
-
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,44 +38,32 @@ public class User implements Serializable {
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
 	
 	private Long id;
-	
 	private String FirstName;
-	
 	private String LastName;
-	
-
-
-	private String Email;
-	
+    private String Email;
 	private String Password;
 	private boolean block;
 	private String DescriptionBlock;
 	private int nbre;
-	
 	@Temporal(TemporalType.DATE)
 	private Date dateNaissance;
 	private String phoneNumber;
 	private String picture;
-	 private String userName;
-	
-	
+	private String userName;
 	@Enumerated
 	private Role role;
 	
-	
-	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
 	private Set<Reclamation> Reclamation;
-
-
-
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
+	private Set<Comment> comments;
+	
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-
 
 
 	public User(String userName, String password, String email) {
@@ -83,8 +73,6 @@ public class User implements Serializable {
 		this.Email = email;
 	}
     
-
-
 
 	public User(String userName, String password, String email,Role role) {
 		super();
@@ -111,23 +99,13 @@ public class User implements Serializable {
 
 
 
-
-
 	public String getFirstName() {
 		return FirstName;
 	}
 
-
-
-
-
-
 	public void setFirstName(String firstName) {
 		FirstName = firstName;
 	}
-
-
-
 
 
 
@@ -137,15 +115,9 @@ public class User implements Serializable {
 
 
 
-
-
-
 	public void setLastName(String lastName) {
 		LastName = lastName;
 	}
-
-
-
 
 
 
@@ -264,23 +236,15 @@ public class User implements Serializable {
 
 
 
-
-
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
 
 
-
-
-
 	public String getPicture() {
 		return picture;
 	}
-
-
-
 
 
 
@@ -291,23 +255,14 @@ public class User implements Serializable {
 
 
 
-
-
 	public String getUserName() {
 		return userName;
 	}
 
 
-
-
-
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-
-
 
 
 
@@ -317,16 +272,9 @@ public class User implements Serializable {
 
 
 
-
-
-
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
-
-
-
 
 
 	public static long getSerialversionuid() {

@@ -74,7 +74,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 		List<Reclamation> reclamations =(List<Reclamation>) reclamationRepository.findAll();
 		for(Reclamation reclamation:reclamations) {
 			if(reclamation.getId()==(j)) {
-				l.info("user ++:"+reclamation);
+			
 				reclama=reclamation;
 			}
 		}
@@ -86,7 +86,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 	public List<Reclamation> afficherReclamation() {
 		List<Reclamation> Reclamations =(List<Reclamation>) reclamationRepository.findAll();
 		for(Reclamation reclamation:Reclamations) {
-			l.info("Reclamation ++:"+reclamation);
+			
 		}
 		return Reclamations;
 	}
@@ -106,62 +106,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 	
 	
 	
-	
-	@Override
-	public void ajouterReclamationuser(Reclamation reclamation, Long IdUser) {
-		/*int x = 0;
-		
-		reclamationRepository.save(reclamation);
-		
-		long idReclamation=reclamation.getId();
-		
-		User UserManageEntity = userRepository.findById(IdUser).get();
-		
-		Reclamation ReclamationmanagerEntity= reclamationRepository.findById((int) idReclamation).get();
-		
-		ReclamationmanagerEntity.setUserId(UserManageEntity);
-		
-		reclamationRepository.save(ReclamationmanagerEntity);
-		
-		List<Reclamation> Reclamations =(List<Reclamation>) reclamationRepository.findAll();
-		
-		for(Reclamation recc:Reclamations) {
-			
-			if(recc.getUserId().getId()==IdUser) {
-				x=x+1;
-			}
-		}
-		
-		User blockeduser = userRepository.findById(IdUser).get();
-		
-		List<Comment> comments =(List<Comment>) commentrepository.findAll();
-		
-		
-		
-		if(x>=3) {
-			
-			
-			blockeduser.setBlock(true);
-			
-			blockeduser.setDescriptionBlock("you have 3 reclamation try to connect with the administration");
-			
-			userRepository.save(blockeduser);
-			
-		}*/
-		
-	}
-	
-	
-	
-	
-	/*public Comment AddComment(Comment comment){
-		
-		return commentrepository.save(comment);
-	}*/
-	
-	
-	
-	public void AddReclamationAndBlokUserWhenCommentsContainsBadWords(String iduser , String idComment) {
+	public String AddReclamationAndBlokUserWhenCommentsContainsBadWords(String iduser , String idComment) {
 		
 		int x=0;
 	
@@ -169,11 +114,11 @@ public class ReclamationServiceImpl implements ReclamationService {
 		List<Reclamation> Reclamations =(List<Reclamation>) reclamationRepository.findAll();
 		
 	
-		User userId = userRepository.findById(Long.parseLong(iduser)).get();
+		User user = userRepository.findById(Long.parseLong(iduser)).get();
 		
-		Comment commentId = commentrepository.findById(Long.parseLong(idComment)).get();
+		Comment comment = commentrepository.findById(Long.parseLong(idComment)).get();
 		
-			String output =filter.getCensoredText(commentId.getDescriptionComment());
+			String output =filter.getCensoredText(comment.getDescriptionComment());
 			
 		
 			
@@ -182,13 +127,14 @@ public class ReclamationServiceImpl implements ReclamationService {
 				
 				l.info("badwordsss   " + output);
 				
-				Reclamation reclamation= new Reclamation("user post in comments bad words !! ", userId, commentId);
+				Reclamation reclamation= new Reclamation("user post in comments bad words !! ", user, comment);
 				
 				reclamationRepository.save(reclamation);
 
 				 for(Reclamation recc:Reclamations) {
 						
-						if(recc.getUserId().getId()==Long.parseLong(iduser)) {
+						if(recc.getUserId().getId()==Long.parseLong(iduser) && 
+								recc.getCommentaire().getIdComment()==Long.parseLong(idComment)) {
 							
 							x=x+1;
 							
@@ -197,6 +143,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 							
 						}
 					}
+			
 					
 					User blockeduser = userRepository.findById(Long.parseLong(iduser)).get();
 					
@@ -208,7 +155,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 						
 						blockeduser.setBlock(true);
 						
-						blockeduser.setDescriptionBlock("you have 3 reclamation try to connect with the administration");
+						blockeduser.setDescriptionBlock("security problem");
 						
 						mailservice.sendEmail(blockeduser.getEmail(), "your account", blockeduser.getUserName()); 
 						
@@ -220,23 +167,30 @@ public class ReclamationServiceImpl implements ReclamationService {
 						
 						userRepository.save(blockeduser);
 						
+					    return "User is bloqued  and comment bloqued too";
+						
 					}
 					
 					
+					return "Nombre de tentative  "+x;
+	      
+					
+			}	 
+			 else{
+					
+					l.info("Comment not contains bad words !!");
+					
+					   return "Comment not contains bad words ";
+				}
 	
-			}
-	
+		
 	}
-	
+
+
 		
 	
 
-	@Override
-	public void deleteReclamation(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 
 
 	

@@ -22,7 +22,7 @@ public class Reclamation implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL) 
 	User userId;
 	
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Comment commentaire;
 
 

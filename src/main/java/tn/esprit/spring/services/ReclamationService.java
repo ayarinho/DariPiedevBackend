@@ -11,7 +11,7 @@ public interface ReclamationService {
 	public void addReclamation(Reclamation r);
 
 	public List<Reclamation> retrieveAllReclamations();	
-	void deleteReclamation(Long id);
+	
 	
 
 	public void ajouterReclamation(Reclamation reclamation);
@@ -19,9 +19,9 @@ public interface ReclamationService {
 	Reclamation findReclamation(String id);
 	List<Reclamation> afficherReclamation();
 	public void affecterreclamationUser(String idReclamation,String IdUser);
-	public void ajouterReclamationuser(Reclamation reclamation,Long IdUser);
+
 	
-	public void AddReclamationAndBlokUserWhenCommentsContainsBadWords(String iduser,String idComment);
+	public String AddReclamationAndBlokUserWhenCommentsContainsBadWords(String iduser,String idComment);
 	
 	
 	

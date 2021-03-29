@@ -4,7 +4,9 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,24 +34,14 @@ import tn.esprit.spring.util.JwtUtil;
 @Service
 public class UserServiceImpl implements IUserService {
 	
-
-    /*public static final String ACCOUNT_SID = "AC372041b706c51a3b578ab2df3113de4e";
-    public static final String AUTH_TOKEN = "c5efe5ea1c4280bed82cc14e7474aa49";
-    
-    Twilio.init(ACCOUNT_SID,AUTH_TOKEN);
-	
-	 Message message = Message.creator(new PhoneNumber("+21627775151"),
-			 new PhoneNumber("+17738048941"),"Bonjouuur").create();*/
-
-	  
-   
+ 
 	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 	
 	@Autowired
 	UserRepository userRepository;
 	
 	@Autowired
-	CryptWithMD5  cryptaWithLD5;
+	CryptWithSHA256  cryptaWithSHA256;
 	
 	@Autowired
 	NotificationServeur notificationServeur;
@@ -64,24 +56,28 @@ public class UserServiceImpl implements IUserService {
     AuthenticationManager authenticationManager;
 	
 	
-	public User ajouterClient(User client,String password) {
-
+	public Map<String, User> ajouterClient(User client,String password) throws Exception {
+		
 		Role role=null;
 		
 		client.setRole(role.Client);
 		
-		notificationServeur.sendNotification(client);
+		Map<String,User> result= new HashMap<>();  					 	// pour sortir resultata et client 
 		
-		String Password = cryptaWithLD5.cryptWithMD5(password);
-       
-		client.setPassword(Password);
+	  	notificationServeur.sendNotification(client);
+	
+		String Pass = cryptaWithSHA256.cryptWithSHA256(password);
 		
-		 
+		client.setPassword(Pass);
+		
+		
 		userRepository.save(client);
 		
-		return client;
+		result.put("Success add client have Registred ", client);
+		
+		  return result;
 
-	}
+	    }
 	
 	
 	
@@ -91,8 +87,7 @@ public class UserServiceImpl implements IUserService {
 		
         admin.setRole(role.Admin);
       
-         
-   
+       
 		userRepository.save(admin);
 		
 		return admin;
@@ -103,21 +98,27 @@ public class UserServiceImpl implements IUserService {
 	
 	public String authentification(String email, String password) throws Exception {
 		
-		
+	
 		Role role=null;
 		
 		List<User> users = (List<User>) userRepository.findAll();
 		int verifyemail = 0;
 		int verifypassword = 0;
 		
+		String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"; // verification mail
+		
+		Pattern pattern = Pattern.compile(regex);
+		
+		Matcher matcher = pattern.matcher(email);
+		
 		for (User user : users) {
+			
+			
 			
 			if (user.getEmail().equals(email)) {
 				verifyemail++;
 			 
-				
-
-				if (user.getPassword().equals(cryptaWithLD5.cryptWithMD5(password))) {
+				if (user.getPassword().equals(cryptaWithSHA256.cryptWithSHA256(password))) {
 					
 					verifypassword++;
 					
@@ -126,21 +127,21 @@ public class UserServiceImpl implements IUserService {
 						
 						  try {
 					            authenticationManager.authenticate(
-					                    new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword())
-					            );
+					                    new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
 					        } catch (Exception ex) {
-					            throw new Exception("inavalid username/password");
+					        	
+					            throw new Exception("inavalid username/password ", ex);
 					        }
 						   
-					         
-						
 						return ("Welcome Admin : " + user.getUserName() + " " +  javautil.generateToken(user.getUserName()));
+						
 						
 					}else if(user.getRole()==role.Client){
 						
 						if(user.isBlock()==true){
 							
-							return user.getDescriptionBlock();
+							return user.getDescriptionBlock() + "try to contact the admin !!";
+							
 						}else{
 							
 							
@@ -152,7 +153,7 @@ public class UserServiceImpl implements IUserService {
 						            throw new Exception("inavalid username/password");
 						        }
 						 
-							return ("Welcome Client :" + user.getUserName()+" "+javautil.generateToken(user.getUserName()));
+							return ("Welcome Client : " + user.getUserName() + " " +javautil.generateToken(user.getUserName()));
 						}
 							
 					} else if(user.getRole()==role.Visitor){
@@ -160,7 +161,7 @@ public class UserServiceImpl implements IUserService {
 						return ("Welcome agent");
 					}
 					
-				}else {
+				}else {   // else pa rapport satuts du password qui est incorrect 
 					
 					if(user.getRole()==role.Client){
 						
@@ -186,22 +187,34 @@ public class UserServiceImpl implements IUserService {
 							
 							userRepository.save(user);
 							
-							return ("votre compte est blocke security problem");
+							return ("Votre compte est blocke security problem");
 							
 						}else {
-							return ("password incorrect");
+							return ("Password incorrect");
 							
 						}
 						
 					}
 					
 				}
+			}else{
+				
+			if (!matcher.matches()) {
+					
+					return "Invalid email";
+					
+				}
+				
 			}
 		}	
 		if (verifyemail == 0) {
-			return ("email not found ");
-		} else {
+			
+			return ("Email not found");
+		} 
+		else {
+			
 			return ("");
+			
 		}
 					
 	
@@ -211,7 +224,7 @@ public class UserServiceImpl implements IUserService {
 	
 	
 	
-	private static boolean checkString(String str) {
+	private static boolean checkString(String str) {  // pour verifier  8 maj et min
 		char ch;
 		boolean capitalFlag = false;
 		boolean lowerCaseFlag = false;
@@ -240,11 +253,15 @@ public class UserServiceImpl implements IUserService {
 		int existe=0;
 		
 		String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+		
 		Pattern pattern = Pattern.compile(regex);
+		
 		Matcher matcher = pattern.matcher(email);
+		
 		if (!matcher.matches()) {
 			return "invalid email";
 		}
+		
 		List<User>users =(List<User>)userRepository.findAll();
 		
 		for(User us:users) {
@@ -256,14 +273,14 @@ public class UserServiceImpl implements IUserService {
 				
 				existe=1;
 				
-				return "we sind you a new password pleaz try to connect with it";
+				return "We sind you a new password pleaz try to connect with it";
 				
 			
 			}
 		}
 		if(existe==0) {
 			
-			return"this compte n'existe pas you can create an accompte";
+			return "This compte n'existe pas you can create an accompte";
 		}
 		return null;
 	}
@@ -284,10 +301,6 @@ public class UserServiceImpl implements IUserService {
 				if (user.getDescriptionBlock().equals("security problem")) {
 					
 					notificationServeur.sendNotification(user);
-					
-					String password = cryptaWithLD5.cryptWithMD5(user.getPassword());
-
-					user.setPassword(password);
 					
 					user.setDescriptionBlock("nothing");
 					
@@ -312,24 +325,24 @@ public class UserServiceImpl implements IUserService {
 	
 	
 	@Override
-	public String changerPassword(String id, String OldPassword,String password, String newPassword) {
+	public String changerPassword(String username, String OldPassword,String password, String newPassword) {
 
-		Long j = Long.parseLong(id);
+		
 
 		List<User> users = (List<User>) userRepository.findAll();
 		
 		for (User user : users) {
 			
-			if (user.getId().equals(j)) {
+			if (user.getUserName().equals(username)) {
 
-				if (user.getPassword().equals(cryptaWithLD5.cryptWithMD5(OldPassword))) {
+				if (user.getPassword().equals(cryptaWithSHA256.cryptWithSHA256(OldPassword))) {
 					
 					if(newPassword.equals(password)){
 						
 					
 					if (checkString(newPassword)) {
 						
-						user.setPassword(cryptaWithLD5.cryptWithMD5(newPassword));
+						user.setPassword(cryptaWithSHA256.cryptWithSHA256(newPassword));
 						
 						userRepository.save(user);
 						
@@ -350,5 +363,26 @@ public class UserServiceImpl implements IUserService {
 		return ".";
 	}
 
+	
+	public User getUserByUsername(String username){                          //teb3aa changer mdp pour recuperer utilisateur 
+		
+		User user=userRepository.findByUserName(username);
+	
+		return user;
+	}
+	
+
+	public void SetPhotoByClient(String photo,Long idUser)
+	{
+		
+		User user=userRepository.findById(idUser).get();
+		
+		user.setPicture(photo);
+		
+		userRepository.save(user);
+	}
+	
+	
+	
 
 }

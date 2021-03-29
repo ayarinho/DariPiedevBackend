@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class CryptWithMD5 {
+public class CryptWithSHA256 {
 	   private static MessageDigest md;
 
-	   public static String cryptWithMD5(String pass){
+	   public static String cryptWithSHA256(String pass){
 	    try {
-	        md = MessageDigest.getInstance("MD5");
+	        md = MessageDigest.getInstance("SHA-256");
 	        byte[] passBytes = pass.getBytes();
 	        md.reset();
 	        byte[] digested = md.digest(passBytes);

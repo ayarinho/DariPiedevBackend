@@ -2,17 +2,20 @@ package tn.esprit.spring.controller;
 
 
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import tn.esprit.spring.entities.Reclamation;
 import tn.esprit.spring.services.ReclamationService;
 
 
@@ -33,10 +36,18 @@ public class ReclamationRestController {
 
 	@PostMapping("/bad-words/{iduser}/{idcomment}")
 	@ResponseBody
-	public void AddReclamationAndBlokUser(@PathVariable("iduser") String iduser , @PathVariable("idcomment")String idComment){
+	public String AddReclamationAndBlokUser(@PathVariable("iduser") String iduser , @PathVariable("idcomment")String idComment){
 		
-		reclamationservice.AddReclamationAndBlokUserWhenCommentsContainsBadWords(iduser,idComment);
+		return reclamationservice.AddReclamationAndBlokUserWhenCommentsContainsBadWords(iduser,idComment);
 		
 	}
 
+	
+	@GetMapping("/getAllReclamations")
+	@ResponseBody
+	public List<Reclamation> getAllReclamations(){
+		
+		return reclamationservice.retrieveAllReclamations();
+		
+	}
 }
