@@ -29,6 +29,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import sun.misc.BASE64Encoder;
+import tn.esprit.spring.entities.Role;
 import tn.esprit.spring.services.CustomUserDetailsService;
 
 import tn.esprit.spring.util.JwtUtil;
@@ -95,10 +96,9 @@ public class JwtFilter extends OncePerRequestFilter {
          
 				try {
 					if (jwtUtil.validateToken(token, userDetails)) {
+					
 						
 						
-					   
-
 					    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
 					    		
 					            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

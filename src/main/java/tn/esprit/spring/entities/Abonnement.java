@@ -20,13 +20,13 @@ public class Abonnement implements Serializable{
 	private Long idF;  
 	
 	
-	@JsonIgnore
+ 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL) 
-	User Abonnes;
+	ConnectedUser Abonnes;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL) 
-	User Abonnements;
+	ConnectedUser Abonnements;
 	
 	public Abonnement(Long id, User Abonnes, User Abonnements) {
 		super();
@@ -38,10 +38,10 @@ public class Abonnement implements Serializable{
 		super();
 	
 	}
-	@Override
+	/*@Override
 	public String toString() {
 		return "Follow [id=" + idF + ", Abonnes=" + Abonnes + ", Abonnements=" + Abonnements + "]";
-	}
+	}*/
 	public Long getId() {
 		return idF;
 	}
@@ -49,7 +49,7 @@ public class Abonnement implements Serializable{
 		this.idF = id;
 	}
 	
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -57,7 +57,7 @@ public class Abonnement implements Serializable{
 		result = prime * result + ((Abonnements == null) ? 0 : Abonnements.hashCode());
 		result = prime * result + ((idF == null) ? 0 : idF.hashCode());
 		return result;
-	}
+	}*/
 	
 	
 	
@@ -67,7 +67,7 @@ public class Abonnement implements Serializable{
 	public void setIdF(Long idF) {
 		this.idF = idF;
 	}
-	public User getAbonnes() {
+	/*public User getAbonnes() {
 		return Abonnes;
 	}
 	public void setAbonnes(User abonnes) {
@@ -104,6 +104,6 @@ public class Abonnement implements Serializable{
 		} else if (!idF.equals(other.idF))
 			return false;
 		return true;
-	}
+	}*/
 	
 }

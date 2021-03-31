@@ -34,7 +34,7 @@ public class Comment implements Serializable{
 		
 			//@JsonIgnore
 			@ManyToOne(cascade = CascadeType.ALL) 
-			User userId;
+			ConnectedUser userId;
 		    
 			@JsonIgnore
 			@OneToMany(cascade = CascadeType.ALL, mappedBy="commentaire")
@@ -43,6 +43,37 @@ public class Comment implements Serializable{
 			public Long getIdComment() {
 				return IdComment;
 			}
+
+			
+			
+			
+			public ConnectedUser getUserId() {
+				return userId;
+			}
+
+
+
+
+			public void setUserId(ConnectedUser userId) {
+				this.userId = userId;
+			}
+
+
+
+
+			public Set<Reclamation> getReclamations() {
+				return reclamations;
+			}
+
+
+
+
+			public void setReclamations(Set<Reclamation> reclamations) {
+				this.reclamations = reclamations;
+			}
+
+
+
 
 			public void setIdComment(Long idComment) {
 				IdComment = idComment;
@@ -72,37 +103,21 @@ public class Comment implements Serializable{
 				IsBlocked = isBlocked;
 			}
 
-			public Set<Reclamation> getReclamations() {
-				return reclamations;
-			}
-
-			public void setReclamations(Set<Reclamation> reclamations) {
-				this.reclamations = reclamations;
-			}
-
-			public Comment(Long idComment, String descriptionComment, int numberLikes, Boolean isBlocked, User userId,
-					Set<Reclamation> reclamations) {
-				super();
-				IdComment = idComment;
-				DescriptionComment = descriptionComment;
-				NumberLikes = numberLikes;
-				IsBlocked = isBlocked;
-				this.userId = userId;
-				this.reclamations = reclamations;
-			}
-
+	
 			public Comment() {
 				super();
 				// TODO Auto-generated constructor stub
 			}
 
-			public User getUserId() {
-				return userId;
+
+
+
+			public Comment(String descriptionComment) {
+				super();
+				DescriptionComment = descriptionComment;
 			}
 
-			public void setUserId(User userId) {
-				this.userId = userId;
-			}
+		
 
 		
 			

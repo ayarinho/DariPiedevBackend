@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Comment;
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.CommentRepository;
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
 
 @Service
@@ -16,12 +18,12 @@ public class CommentServiceImpl  implements IcommentService{
 	@Autowired
 	CommentRepository  commentrepository;
 	@Autowired
-	UserRepository  userRepository  ;
+	ConnectedUserRepository  userRepository  ;
 	
 	
 	public Comment AddComment(Comment comment,long idUser) {
 		
-	      User  user= userRepository.findById(idUser).get();
+		ConnectedUser  user= (ConnectedUser) userRepository.findById(idUser).get();
 		 
 		 comment.setUserId(user);
 		

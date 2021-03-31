@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,12 +26,14 @@ import org.hibernate.annotations.ManyToAny;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tn.esprit.spring.audit.AuditTable;
 
 
-@Entity
+//@Entity
 @Table(name="User")
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User implements Serializable {
+@MappedSuperclass
+
+public abstract class User extends AuditTable<String> implements Serializable {  // implementation d'audit pour securiser base de donner
 
 	private static final long serialVersionUID = 1L;
 	
@@ -53,11 +56,11 @@ public class User implements Serializable {
 	@Enumerated
 	private Role role;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
+	/*@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
 	private Set<Reclamation> Reclamation;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
-	private Set<Comment> comments;
+	private Set<Comment> comments;*/
 	
 
 	public User() {

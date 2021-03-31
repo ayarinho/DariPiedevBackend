@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.Role;
 
 import tn.esprit.spring.entities.User;
@@ -69,7 +70,7 @@ public class UserRestController {
 	@PostMapping("/add-user/{password}")
 	@ResponseBody
 	
-	public Map<String, User>  Add(@RequestBody User  client,@PathVariable("password") String password) throws Exception{
+	public Map<String, ConnectedUser>  Add(@RequestBody ConnectedUser  client,@PathVariable("password") String password) throws Exception{
 		
 	
 		return iuserService.ajouterClient(client, password);
@@ -77,13 +78,13 @@ public class UserRestController {
 	
 	
 	
-	@PostMapping("/add-admin")
+	/*@PostMapping("/add-admin")
 	@ResponseBody
 	
 	public User AddAdmin(@RequestBody User  admin) throws Exception{
 		
 		return iuserService.ajouterAdmin(admin);
-	}
+	}*/
 	  
 
 

@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.User;
 
 
@@ -59,7 +60,7 @@ public void sendEmail2(String maill, String usermail) throws MailException {
 	
 	
 	
-	public void sendEmailWithAttachment(User user) throws MailException, MessagingException {
+	public void sendEmailWithAttachment(ConnectedUser user) throws MailException, MessagingException {
 
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 

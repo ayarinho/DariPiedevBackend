@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Comment;
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.Reclamation;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.CommentRepository;
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.ReclamationRepository;
 
 import tn.esprit.spring.repository.UserRepository;
@@ -26,7 +28,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 	
 
 	@Autowired
-	UserRepository userRepository;
+	ConnectedUserRepository userRepository;
 	
 	@Autowired
 	UserServiceImpl userServiceImpl;
@@ -94,7 +96,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 	
 	@Override
 	public void affecterreclamationUser(String idReclamation, String IdUser) {
-		User UserManageEntity = userRepository.findById(Long.parseLong(IdUser)).get();
+		ConnectedUser UserManageEntity = userRepository.findById(Long.parseLong(IdUser)).get();
 		Reclamation ReclamationmanagerEntity= reclamationRepository.findById((int) Long.parseLong(idReclamation)).get();
 		ReclamationmanagerEntity.setUserId(UserManageEntity);
 		
@@ -114,7 +116,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 		List<Reclamation> Reclamations =(List<Reclamation>) reclamationRepository.findAll();
 		
 	
-		User user = userRepository.findById(Long.parseLong(iduser)).get();
+		ConnectedUser user = userRepository.findById(Long.parseLong(iduser)).get();
 		
 		Comment comment = commentrepository.findById(Long.parseLong(idComment)).get();
 		
@@ -145,7 +147,7 @@ public class ReclamationServiceImpl implements ReclamationService {
 					}
 			
 					
-					User blockeduser = userRepository.findById(Long.parseLong(iduser)).get();
+				 ConnectedUser blockeduser = userRepository.findById(Long.parseLong(iduser)).get();
 					
 					Comment blockedComment = commentrepository.findById(Long.parseLong(idComment)).get();
 					
@@ -184,6 +186,8 @@ public class ReclamationServiceImpl implements ReclamationService {
 				}
 	
 		
+		
+	
 	}
 
 

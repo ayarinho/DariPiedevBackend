@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Abonnement;
-
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.AbonnementRepository;
-
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
 
 
@@ -21,7 +21,7 @@ public class AbonnementServiceImpl implements AbonnementService {
 	@Autowired
 	AbonnementRepository abonnementRepository;
 	@Autowired
-	UserRepository  userRepo;
+	ConnectedUserRepository  userRepo;
 
 	@Override
 	public List<Object> MesAbonnes(Long abonne_id) {  // houmaa  eli 3amlelhom abonner 
@@ -47,11 +47,11 @@ public class AbonnementServiceImpl implements AbonnementService {
 	@Override
 	public Map<String,Abonnement> AbonnementService(long abonne_id, long Abonnement_id) {
 		
-		User user1 = new User();
+		ConnectedUser user1 = new ConnectedUser();
 		
-		User user2 = new User();
+		ConnectedUser user2 = new ConnectedUser();
 		
-		List<User> users = (List<User>) userRepo.findAll();
+		List<ConnectedUser> user = (List<ConnectedUser>) userRepo.findAll();
 		
 		Map<String,Abonnement> result= new HashMap<String, Abonnement>();
 		
@@ -103,7 +103,6 @@ public class AbonnementServiceImpl implements AbonnementService {
 			
 			
 		}
-
 	
 		
 	}

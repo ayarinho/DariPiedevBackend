@@ -20,7 +20,7 @@ public class Reclamation implements Serializable{
 	private String Description;
 	
 	@ManyToOne(cascade = CascadeType.ALL) 
-	User userId;
+	ConnectedUser userId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Comment commentaire;
@@ -32,23 +32,7 @@ public class Reclamation implements Serializable{
 	public void setDescription(String description) {
 		Description = description;
 	}
-	public User getUserId() {
-		return userId;
-	}
-	public void setUserId(User userId) {
-		this.userId = userId;
-	}
 	
-	
-	
-	
-	
-	public Comment getCommentaire() {
-		return commentaire;
-	}
-	public void setCommentaire(Comment commentaire) {
-		this.commentaire = commentaire;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -59,13 +43,30 @@ public class Reclamation implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Reclamation( String description, User userId, Comment commentaire) {
+	public Reclamation(Long id, String description) {
 		super();
-		
+		this.id = id;
+		Description = description;
+	}
+	public ConnectedUser getUserId() {
+		return userId;
+	}
+	public void setUserId(ConnectedUser userId) {
+		this.userId = userId;
+	}
+	public Comment getCommentaire() {
+		return commentaire;
+	}
+	public void setCommentaire(Comment commentaire) {
+		this.commentaire = commentaire;
+	}
+	public Reclamation(String description, ConnectedUser userId, Comment commentaire) {
+		super();
 		Description = description;
 		this.userId = userId;
 		this.commentaire = commentaire;
 	}
+	
 
 	
 	

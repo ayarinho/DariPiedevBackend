@@ -10,6 +10,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.UserRepository;
 
@@ -35,7 +36,7 @@ public class NotificationServeur {
 		this.javaMailSender = javaMailSender;
 	}
 	
-	public void sendNotification(User user){
+	public void sendNotification(ConnectedUser user){
 		
 		String password="";
 		

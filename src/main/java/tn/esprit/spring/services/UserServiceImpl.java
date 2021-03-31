@@ -1,11 +1,15 @@
 package tn.esprit.spring.services;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,10 +27,10 @@ import com.twilio.type.PhoneNumber;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
+import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.Role;
 import tn.esprit.spring.entities.User;
-
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
 import tn.esprit.spring.util.JwtUtil;
 
@@ -38,7 +42,7 @@ public class UserServiceImpl implements IUserService {
 	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 	
 	@Autowired
-	UserRepository userRepository;
+	ConnectedUserRepository userRepository;
 	
 	@Autowired
 	CryptWithSHA256  cryptaWithSHA256;
@@ -56,13 +60,15 @@ public class UserServiceImpl implements IUserService {
     AuthenticationManager authenticationManager;
 	
 	
-	public Map<String, User> ajouterClient(User client,String password) throws Exception {
+	public Map<String, ConnectedUser> ajouterClient(ConnectedUser client,String password) throws Exception {
 		
 		Role role=null;
 		
+		logger.info("ayarinho ya behi fuck life of perople !!!! "+ role.Client.toString());
+		
 		client.setRole(role.Client);
 		
-		Map<String,User> result= new HashMap<>();  					 	// pour sortir resultata et client 
+		Map<String,ConnectedUser> result= new HashMap<>();  					 	// pour sortir resultata et client 
 		
 	  	notificationServeur.sendNotification(client);
 	
@@ -80,8 +86,54 @@ public class UserServiceImpl implements IUserService {
 	    }
 	
 	
+	public void newUserConnected() {
+		
+	    long millis=System.currentTimeMillis();  
+	 
+	    java.sql.Date date=new java.sql.Date(millis);  
+	    System.out.println(date);
+	    
+	    int x=0;
+	   
+	    List<ConnectedUser> tables =(List<ConnectedUser>)userRepository.findAll(); 
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(date);
+	    int year=calendar.get(Calendar.YEAR);
+	    int day=calendar.get(Calendar.DAY_OF_MONTH);
+	    int month=calendar.get(Calendar.MONTH);
+	    
+	     
+	    System.out.println(year+""+day+""+month);
+	    
+	  
+	    for(ConnectedUser Cnnec:tables) {
+	    	 Calendar cal = Calendar.getInstance();
+	    	 cal.setTime(Cnnec.getToday());
+	    	 int year1=cal.get(Calendar.YEAR);
+			 int day1=cal.get(Calendar.DAY_OF_MONTH);
+			 int month1=cal.get(Calendar.MONTH);
+			 System.out.println(year1+""+day1+""+month1);
+			 
+		if(year1==year && day1==day && month==month1 ) {
+				 Cnnec.setNbrConnect(Cnnec.getNbrConnect()+1);
+				 userRepository.save(Cnnec);
+				 x=10+x;
+			 }
+	    	
+	    
+	    	
+	    }
+	   /* if(x==0) {
+	    ConnectedUser CU=new ConnectedUser(null,date,1);
+	    
+	    userRepository.save(CU);
+	   }*/
+
+}
+
 	
-	public User ajouterAdmin(User admin) {
+	
+	public ConnectedUser ajouterAdmin(ConnectedUser admin) {
 		
         Role role=null;
 		
@@ -101,7 +153,9 @@ public class UserServiceImpl implements IUserService {
 	
 		Role role=null;
 		
-		List<User> users = (List<User>) userRepository.findAll();
+	
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+		
 		int verifyemail = 0;
 		int verifypassword = 0;
 		
@@ -111,8 +165,7 @@ public class UserServiceImpl implements IUserService {
 		
 		Matcher matcher = pattern.matcher(email);
 		
-		for (User user : users) {
-			
+		for (ConnectedUser user : users) {
 			
 			
 			if (user.getEmail().equals(email)) {
@@ -121,6 +174,7 @@ public class UserServiceImpl implements IUserService {
 				if (user.getPassword().equals(cryptaWithSHA256.cryptWithSHA256(password))) {
 					
 					verifypassword++;
+					
 					
 					if(user.getRole()==role.Admin){
 						 
@@ -136,14 +190,16 @@ public class UserServiceImpl implements IUserService {
 						return ("Welcome Admin : " + user.getUserName() + " " +  javautil.generateToken(user.getUserName()));
 						
 						
-					}else if(user.getRole()==role.Client){
+					}else 
+						if(user.getRole()==role.Client){
 						
 						if(user.isBlock()==true){
 							
-							return user.getDescriptionBlock() + "try to contact the admin !!";
+							return user.getDescriptionBlock() + "Try to contact with admin !!";
 							
 						}else{
 							
+
 							
 							  try {
 						            authenticationManager.authenticate(
@@ -216,6 +272,8 @@ public class UserServiceImpl implements IUserService {
 			return ("");
 			
 		}
+		
+	
 					
 	
 
@@ -262,9 +320,9 @@ public class UserServiceImpl implements IUserService {
 			return "invalid email";
 		}
 		
-		List<User>users =(List<User>)userRepository.findAll();
+		List<ConnectedUser>users =(List<ConnectedUser>)userRepository.findAll();
 		
-		for(User us:users) {
+		for(ConnectedUser us:users) {
 			
 			if(us.getEmail().equals(email)) {
 				
@@ -290,9 +348,9 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public String deblockCompte(String email) {
 		
-		List<User> users = (List<User>) userRepository.findAll();
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
 		
-		for (User user : users) {
+		for (ConnectedUser user : users) {
 			
 			System.out.println(user.getEmail());
 			
@@ -300,7 +358,7 @@ public class UserServiceImpl implements IUserService {
 
 				if (user.getDescriptionBlock().equals("security problem")) {
 					
-					notificationServeur.sendNotification(user);
+					notificationServeur.sendNotification( user);
 					
 					user.setDescriptionBlock("nothing");
 					
@@ -308,7 +366,7 @@ public class UserServiceImpl implements IUserService {
 					
 					user.setBlock(false);
 					
-					userRepository.save(user);
+					userRepository.save( user);
 					
 					return "we send you a new password pleaz chek your email";
 					
@@ -329,9 +387,9 @@ public class UserServiceImpl implements IUserService {
 
 		
 
-		List<User> users = (List<User>) userRepository.findAll();
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
 		
-		for (User user : users) {
+		for (ConnectedUser user : users) {
 			
 			if (user.getUserName().equals(username)) {
 
@@ -366,7 +424,7 @@ public class UserServiceImpl implements IUserService {
 	
 	public User getUserByUsername(String username){                          //teb3aa changer mdp pour recuperer utilisateur 
 		
-		User user=userRepository.findByUserName(username);
+		ConnectedUser user=userRepository.findByUserName(username);
 	
 		return user;
 	}
@@ -375,13 +433,20 @@ public class UserServiceImpl implements IUserService {
 	public void SetPhotoByClient(String photo,Long idUser)
 	{
 		
-		User user=userRepository.findById(idUser).get();
+		ConnectedUser user=(ConnectedUser) userRepository.findById(idUser).get();
 		
 		user.setPicture(photo);
 		
 		userRepository.save(user);
 	}
+
+
+
 	
+
+
+
+
 	
 	
 

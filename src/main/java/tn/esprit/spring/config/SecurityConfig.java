@@ -1,13 +1,4 @@
 package tn.esprit.spring.config;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
 
 import javax.servlet.Filter;
 
@@ -15,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,19 +24,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.google.api.client.util.Key;
-import com.google.api.client.util.Value;
+
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import tn.esprit.spring.audit.AuditorAwareImpl;
 import tn.esprit.spring.filter.JwtFilter;
 import tn.esprit.spring.services.CustomUserDetailsService;
 
 
+
 @Configuration
 @EnableWebSecurity
-
+@EnableJpaAuditing(auditorAwareRef="auditorAware")
 public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 
     @Autowired
@@ -76,16 +70,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	
-   
+    
+   tn.esprit.spring.entities.Role role= null;
+    
+  
+    
     	http.cors();
     	http.csrf().disable();
     	
-   http.authorizeRequests().antMatchers("/authentification/**","/add-user/**"
-    			,"/upload","/setPhoto/**","/getUser/**"/*"/changer-Password/**","/forget-Password/**"*/)
-        .permitAll().anyRequest().authenticated()
-        .and().exceptionHandling().and().sessionManagement()
+   http.authorizeRequests()
+   .antMatchers("/authentification/**","/add-user/**",
+    			"/upload","/setPhoto/**","/getUser/**"
+    			/*"/changer-Password/**","/forget-Password/**"*/)
+   		
+   
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+       .and().exceptionHandling().and().sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 http.addFilterBefore(jwtFilter,  UsernamePasswordAuthenticationFilter.class);
         
+
+
+
+
+
+    }
+    
+    @Bean
+    
+    public AuditorAware<String> auditorAware(){
+    	
+    	return new AuditorAwareImpl();
     }
 }
