@@ -13,7 +13,7 @@ import tn.esprit.spring.entities.User;
 
 @NoRepositoryBean
 //@Repository
-public interface  UserRepository<T, Long extends Serializable> extends CrudRepository<T, Long>{ // type generique bech eli bech heritiih meyouhelech kima list
+public interface  UserRepository<T, Long extends Serializable> extends JpaRepository<T, Long>{ // type generique bech eli bech heritiih meyouhelech kima list
 
 	
 	//T findByUserName(String username);

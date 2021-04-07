@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Abonnement;
@@ -13,6 +15,7 @@ import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.AbonnementRepository;
 import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
+
 
 
 
@@ -28,6 +31,12 @@ public class AbonnementServiceImpl implements AbonnementService {
 
 		return abonnementRepository.MesAbonnes(abonne_id);
 	}
+	
+	@Override
+	public Long getAbonnes(Long abonne_id,Long abonnement_id) {  // houmaa  eli 3amlelhom abonner 
+
+		return abonnementRepository.getAbonnes(abonne_id, abonnement_id);
+	}
 
 	@Override
 	public List<Object> Abonnements(Long Abonnement_id) { // ena eli mabonnehom
@@ -37,12 +46,13 @@ public class AbonnementServiceImpl implements AbonnementService {
 
 	@Override
 	public int nombreAbonnes(Long abonne_id) {
-
+		
+		
 		return abonnementRepository.nombreAbonnes(abonne_id);
 	}
 
 
-	
+
 
 	@Override
 	public Map<String,Abonnement> AbonnementService(long abonne_id, long Abonnement_id) {

@@ -97,11 +97,19 @@ public class JwtUtil {
     	
     	
         final String username = extractUsername(token);
-        
+        try{
+        	if(username != null){
+        		
+                return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 
-    	
-    	L.info("ayaross" , username);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        	}
+        }catch(Exception e){
+        	
+        	L.info("username is null we should add user " + e.getMessage());
+
+        }
+
+    	return null;
     }
     
 

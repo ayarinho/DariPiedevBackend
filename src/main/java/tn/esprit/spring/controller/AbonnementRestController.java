@@ -25,6 +25,13 @@ public class AbonnementRestController {
 	AbonnementService  abonnementService ;
 	
 
+	@GetMapping("/get-Abonnes/{abonne_id}/{abonnement_id}")
+	@ResponseBody
+	public Long getAbonnes(@PathVariable("abonne_id") Long abonne_id,@PathVariable("abonnement_id") Long abonnement_id){
+		
+		
+		return abonnementService.getAbonnes(abonne_id, abonnement_id);
+	}
 	
 	@GetMapping("/Mes-Abonnes/{abonne_id}")
 	@ResponseBody

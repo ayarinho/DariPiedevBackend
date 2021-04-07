@@ -10,8 +10,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import tn.esprit.spring.audit.AuditorAwareImpl;
 import tn.esprit.spring.services.UserServiceImpl;
 
 
@@ -19,6 +23,7 @@ import tn.esprit.spring.services.UserServiceImpl;
 
 @SpringBootApplication
 @Configuration
+
 public class PiedevDariApplication {
 
 	
@@ -30,7 +35,7 @@ public class PiedevDariApplication {
 	public static final Logger L=LogManager.getLogger(PiedevDariApplication.class);
 
 
-	
+ 
 	
 	public static void main(String[] args) throws IOException, Exception {
 		SpringApplication.run(PiedevDariApplication.class, args);

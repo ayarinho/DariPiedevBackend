@@ -15,5 +15,7 @@ public interface IUserService {
 	//public User ajouterAdmin(User admin);
 	public void SetPhotoByClient(String photo,Long idUser);
 	public User getUserByUsername(String username);
+	public void newUserConnected();
+	public String DeleteConnectUser(long idUser);
 
 }

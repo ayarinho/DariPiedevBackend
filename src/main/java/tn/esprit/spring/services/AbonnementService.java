@@ -15,5 +15,6 @@ public interface AbonnementService {
 	//public int nbreFollowing(Long id);
 	public Map<String,Abonnement>  AbonnementService(long abonne_id, long Abonnement_id);
 	public boolean findAbonnes(long follow_id , long followed_id);
+	public Long getAbonnes(Long abonne_id,Long abonnement_id);
 
 }

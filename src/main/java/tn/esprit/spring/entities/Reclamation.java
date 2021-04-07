@@ -10,19 +10,24 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import tn.esprit.spring.audit.AuditTable;
+
 
 @Entity
-public class Reclamation implements Serializable{
+public class Reclamation extends AuditTable<String>  implements Serializable{
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)	
 	private Long id; 
 	private String Description;
 	
-	@ManyToOne(cascade = CascadeType.ALL) 
+	@JsonIgnore
+	@ManyToOne(/*cascade = CascadeType.ALL*/) 
 	ConnectedUser userId;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(/*cascade = CascadeType.ALL*/)
 	private Comment commentaire;
 
 

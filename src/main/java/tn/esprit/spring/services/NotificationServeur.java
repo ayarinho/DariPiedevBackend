@@ -71,12 +71,12 @@ public class NotificationServeur {
 		
 		//sending sms
 		
-		
+		/*
 		 Twilio.init(ACCOUNT_SID,AUTH_ID);
 			
 		 Message message = Message.creator(new PhoneNumber(user.getPhoneNumber()),
 				 new PhoneNumber("+17378885488"),pass).create();
-		
+		*/
 		//sending email
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());

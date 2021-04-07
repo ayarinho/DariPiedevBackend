@@ -24,6 +24,8 @@ public class Abonnement implements Serializable{
 	@ManyToOne(cascade = CascadeType.ALL) 
 	ConnectedUser Abonnes;
 	
+ 	
+ 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL) 
 	ConnectedUser Abonnements;
@@ -38,10 +40,7 @@ public class Abonnement implements Serializable{
 		super();
 	
 	}
-	/*@Override
-	public String toString() {
-		return "Follow [id=" + idF + ", Abonnes=" + Abonnes + ", Abonnements=" + Abonnements + "]";
-	}*/
+	
 	public Long getId() {
 		return idF;
 	}

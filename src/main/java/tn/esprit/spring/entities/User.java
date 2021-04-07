@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ManyToAny;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +34,7 @@ import tn.esprit.spring.audit.AuditTable;
 //@Entity
 @Table(name="User")
 @MappedSuperclass
-
+@EntityListeners(AuditingEntityListener.class)
 public abstract class User extends AuditTable<String> implements Serializable {  // implementation d'audit pour securiser base de donner
 
 	private static final long serialVersionUID = 1L;

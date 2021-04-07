@@ -3,6 +3,8 @@ package tn.esprit.spring.controller;
 import static org.hamcrest.CoreMatchers.is;
 
 import java.security.spec.X509EncodedKeySpec;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -19,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,17 +36,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
+import tn.esprit.spring.entities.Appointment;
 import tn.esprit.spring.entities.ConnectedUser;
 import tn.esprit.spring.entities.Role;
 
 import tn.esprit.spring.entities.User;
-
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
+import tn.esprit.spring.services.AppointmentService;
 import tn.esprit.spring.services.CustomUserDetailsService;
 
 import tn.esprit.spring.services.IUserService;
 import tn.esprit.spring.services.ReclamationService;
 import tn.esprit.spring.services.Storageservice;
+import tn.esprit.spring.specification.ConnectedUserSpec;
 import tn.esprit.spring.util.JwtUtil;
 
 @RestController
@@ -61,7 +68,13 @@ public class UserRestController {
 	
 	 ReclamationService  reclamationservice ;
 	
+	@Autowired
 	
+	  AppointmentService apoitmentService ;
+	
+	@Autowired
+	
+	 ConnectedUserRepository connectUserRepository ;
 	
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
@@ -138,6 +151,25 @@ public class UserRestController {
 	public void SetPhotoByClient(@PathVariable("idUser") Long idUser,@PathVariable("photo")String photo){
 		
 		 iuserService.SetPhotoByClient(photo, idUser);
+		
+	}
+	
+	@DeleteMapping("/delete-user/{idUser}")
+	@ResponseBody
+	public String DeleteUser(@PathVariable("idUser") Long idUser){
+		
+		return iuserService.DeleteConnectUser(idUser);
+	}
+	
+	
+	
+	@GetMapping("/connected-User/{firstname}")
+	@ResponseBody
+	public List<ConnectedUser> getAllUserByFirstnameWithSpecification(@PathVariable("firstname") String firstname){
+		
+		Specification<ConnectedUser> specifications=Specification.where(ConnectedUserSpec.hasFirstName(firstname));
+		
+		return connectUserRepository.findAll(specifications);
 		
 	}
 }

@@ -22,10 +22,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
     	  ConnectedUser  user = repository.findByUserName(username);
  
-        
+    	  try{
+    		  
+    		  if(user != null){
+    			  
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), new ArrayList<>());
+ 
+    		  }
+    		  
+    	  }catch(Exception e){
+    		  
+    		  System.out.println("Database is empty user is null");
+    	  }
+        
+        return null;
     }
 }

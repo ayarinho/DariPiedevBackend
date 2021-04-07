@@ -16,110 +16,87 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import tn.esprit.spring.audit.AuditTable;
 
 @Entity
 @Table(name = "T_COMMENT")
-public class Comment implements Serializable{
+public class Comment extends AuditTable<String>  implements Serializable {
 
-			private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-			@Id
-			@GeneratedValue(strategy=GenerationType.IDENTITY)
-			private Long IdComment;
-			
-			private String DescriptionComment;
-			private int NumberLikes;
-			
-			private Boolean IsBlocked;
-		
-			//@JsonIgnore
-			@ManyToOne(cascade = CascadeType.ALL) 
-			ConnectedUser userId;
-		    
-			@JsonIgnore
-			@OneToMany(cascade = CascadeType.ALL, mappedBy="commentaire")
-			private Set<Reclamation> reclamations;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long IdComment;
 
-			public Long getIdComment() {
-				return IdComment;
-			}
+	private String DescriptionComment;
+	private int NumberLikes;
 
-			
-			
-			
-			public ConnectedUser getUserId() {
-				return userId;
-			}
+	private Boolean IsBlocked;
 
+	@JsonIgnore
+	@ManyToOne(/* cascade = CascadeType.ALL */)
+	ConnectedUser userId;
 
+	@JsonIgnore
+	@OneToMany(/* cascade = CascadeType.ALL, */ mappedBy = "commentaire")
+	private Set<Reclamation> reclamations;
 
+	public Long getIdComment() {
+		return IdComment;
+	}
 
-			public void setUserId(ConnectedUser userId) {
-				this.userId = userId;
-			}
+	public ConnectedUser getUserId() {
+		return userId;
+	}
 
+	public void setUserId(ConnectedUser userId) {
+		this.userId = userId;
+	}
 
+	public Set<Reclamation> getReclamations() {
+		return reclamations;
+	}
 
+	public void setReclamations(Set<Reclamation> reclamations) {
+		this.reclamations = reclamations;
+	}
 
-			public Set<Reclamation> getReclamations() {
-				return reclamations;
-			}
+	public void setIdComment(Long idComment) {
+		IdComment = idComment;
+	}
 
+	public String getDescriptionComment() {
+		return DescriptionComment;
+	}
 
+	public void setDescriptionComment(String descriptionComment) {
+		DescriptionComment = descriptionComment;
+	}
 
+	public int getNumberLikes() {
+		return NumberLikes;
+	}
 
-			public void setReclamations(Set<Reclamation> reclamations) {
-				this.reclamations = reclamations;
-			}
+	public void setNumberLikes(int numberLikes) {
+		NumberLikes = numberLikes;
+	}
 
+	public Boolean getIsBlocked() {
+		return IsBlocked;
+	}
 
+	public void setIsBlocked(Boolean isBlocked) {
+		IsBlocked = isBlocked;
+	}
 
+	public Comment() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-			public void setIdComment(Long idComment) {
-				IdComment = idComment;
-			}
-
-			public String getDescriptionComment() {
-				return DescriptionComment;
-			}
-
-			public void setDescriptionComment(String descriptionComment) {
-				DescriptionComment = descriptionComment;
-			}
-
-			public int getNumberLikes() {
-				return NumberLikes;
-			}
-
-			public void setNumberLikes(int numberLikes) {
-				NumberLikes = numberLikes;
-			}
-
-			public Boolean getIsBlocked() {
-				return IsBlocked;
-			}
-
-			public void setIsBlocked(Boolean isBlocked) {
-				IsBlocked = isBlocked;
-			}
-
-	
-			public Comment() {
-				super();
-				// TODO Auto-generated constructor stub
-			}
-
-
-
-
-			public Comment(String descriptionComment) {
-				super();
-				DescriptionComment = descriptionComment;
-			}
-
-		
-
-		
-			
+	public Comment(String descriptionComment) {
+		super();
+		DescriptionComment = descriptionComment;
+	}
 
 }
