@@ -22,12 +22,6 @@ import tn.esprit.spring.entities.User;
 public class MailService {
 
 	
-
-	/*
-	 * The Spring Framework provides an easy abstraction for sending email by
-	 * using the JavaMailSender interface, and Spring Boot provides
-	 * auto-configuration for it as well as a starter module.
-	 */
 	private JavaMailSender javaMailSender;
 
 	@Autowired
@@ -41,12 +35,13 @@ public class MailService {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(maill);
 		mail.setSubject("Warning!!");
-		mail.setText("Dear Client :"+usermail+" Your comment below :"+descriptionmail+" has been blocked!! If you will repeat another one you will be blocked as well ;)");
+		mail.setText("Dear Client :"+usermail+" Your comment below :"+descriptionmail+ " has been blocked!! If you will repeat another one you will be blocked as well ;)");
 
 		javaMailSender.send(mail);
+		
 	}
 
-public void sendEmail2(String maill, String usermail) throws MailException {
+		public void sendEmail2(String maill, String usermail) throws MailException {
 
 		
 		SimpleMailMessage mail = new SimpleMailMessage();
@@ -55,6 +50,7 @@ public void sendEmail2(String maill, String usermail) throws MailException {
 		mail.setText("Dear Client :"+usermail+" You have been blocked !!!");
 
 		javaMailSender.send(mail);
+		
 	}
 
 	

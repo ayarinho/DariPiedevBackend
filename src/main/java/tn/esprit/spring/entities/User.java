@@ -21,8 +21,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ManyToAny;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
@@ -45,7 +48,11 @@ public abstract class User extends AuditTable<String> implements Serializable { 
 	private Long id;
 	private String FirstName;
 	private String LastName;
+	
+	@javax.validation.constraints.Email(message="email n'est valid syntaxiquement")
+	@NotNull
     private String Email;
+
 	private String Password;
 	private boolean block;
 	private String DescriptionBlock;
@@ -58,11 +65,7 @@ public abstract class User extends AuditTable<String> implements Serializable { 
 	@Enumerated
 	private Role role;
 	
-	/*@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
-	private Set<Reclamation> Reclamation;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="userId")
-	private Set<Comment> comments;*/
+
 	
 
 	public User() {

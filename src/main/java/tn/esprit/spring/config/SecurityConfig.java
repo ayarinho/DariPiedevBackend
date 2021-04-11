@@ -20,6 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -59,10 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
        
     }
     
-    
- 
-    
-    
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
@@ -78,10 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	
-    
-   tn.esprit.spring.entities.Role role= null;
-    
+   
   
     
     	http.cors();
@@ -89,8 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     	
    http.authorizeRequests()
    .antMatchers("/authentification/**","/add-user/**",
-    			"/upload","/setPhoto/**","/getUser/**"
-    			/*"/changer-Password/**","/forget-Password/**"*/)
+    			"/upload","/setPhoto/**","/getUser/**",
+    			"/changer-Password/**","/forget-Password/**")
    		
    
         .permitAll()
@@ -98,7 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
         .authenticated()
        .and().exceptionHandling().and().sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-http.addFilterBefore(jwtFilter,  UsernamePasswordAuthenticationFilter.class);
+        
+   
+   		http.addFilterBefore(jwtFilter,  UsernamePasswordAuthenticationFilter.class);
         
 
     }

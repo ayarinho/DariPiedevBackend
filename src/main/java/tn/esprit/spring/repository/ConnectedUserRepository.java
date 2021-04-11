@@ -17,5 +17,4 @@ public interface  ConnectedUserRepository extends UserRepository<ConnectedUser,L
 	
 	ConnectedUser findByUserName(String username);
 
-
 }

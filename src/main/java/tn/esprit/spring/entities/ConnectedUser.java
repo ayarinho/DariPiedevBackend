@@ -3,6 +3,7 @@ package tn.esprit.spring.entities;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -23,6 +24,8 @@ import javax.persistence.OneToMany;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @AttributeOverrides({
     @AttributeOverride(name="FirstName", column=@Column(name="FIRSTNAME")),
@@ -35,9 +38,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class ConnectedUser extends User  implements Serializable{
 	
 
-	
-	private Date Today;
-	private int nbrConnect;
+	private String lieu;
 	
 	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
@@ -50,13 +51,26 @@ public class ConnectedUser extends User  implements Serializable{
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="user" )
 	private Set<Appointment> Appointment;
 	
+	@OneToMany( mappedBy="Abonnes" )
+	private List<Abonnement> abonnement;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	private List<Ad> ads;
 	
 	
-	public ConnectedUser(Date today, int nbrConnect, Set<tn.esprit.spring.entities.Reclamation> reclamation,
+	
+
+	public List<Ad> getAds() {
+		return ads;
+	}
+	public void setAds(List<Ad> ads) {
+		this.ads = ads;
+	}
+	public ConnectedUser( Set<tn.esprit.spring.entities.Reclamation> reclamation,
 			Set<Comment> comments, Set<tn.esprit.spring.entities.Appointment> appointment) {
 		super();
-		Today = today;
-		this.nbrConnect = nbrConnect;
+		
 		Reclamation = reclamation;
 		this.comments = comments;
 		Appointment = appointment;
@@ -91,33 +105,27 @@ public class ConnectedUser extends User  implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Date getToday() {
-		return Today;
+	public String getLieu() {
+		return lieu;
 	}
-	public void setToday(Date today) {
-		Today = today;
+	public void setLieu(String lieu) {
+		this.lieu = lieu;
 	}
-	public int getNbrConnect() {
-		return nbrConnect;
+	public List<Abonnement> getAbonnement() {
+		return abonnement;
 	}
-	public void setNbrConnect(int nbrConnect) {
-		this.nbrConnect = nbrConnect;
-	}
-	public ConnectedUser( Set<Comment> comments,Date today, int nbrConnect) {
-		super();
-		Today = today;
-		this.nbrConnect = nbrConnect;
-		this.comments = comments;
+	public void setAbonnement(List<Abonnement> abonnement) {
+		this.abonnement = abonnement;
 	}
 	@Override
 	public String toString() {
-		return "ConnectedUser [Today=" + Today + ", nbrConnect=" + nbrConnect + ", Reclamation=" + Reclamation
-				+ ", comments=" + comments + ", Appointment=" + Appointment + ", createdBy=" + createdBy
+		return "ConnectedUser [lieu=" + lieu + ", Reclamation=" + Reclamation + ", comments=" + comments
+				+ ", Appointment=" + Appointment + ", abonnement=" + abonnement + ", createdBy=" + createdBy
 				+ ", updatedBy=" + updatedBy + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate
 				+ ", getReclamation()=" + getReclamation() + ", getComments()=" + getComments() + ", getAppointment()="
-				+ getAppointment() + ", getToday()=" + getToday() + ", getNbrConnect()=" + getNbrConnect()
-				+ ", getId()=" + getId() + ", getFirstName()=" + getFirstName() + ", getLastName()=" + getLastName()
-				+ ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", isBlock()=" + isBlock()
+				+ getAppointment() + ", getLieu()=" + getLieu() + ", getAbonnement()=" + getAbonnement() + ", getId()="
+				+ getId() + ", getFirstName()=" + getFirstName() + ", getLastName()=" + getLastName() + ", getEmail()="
+				+ getEmail() + ", getPassword()=" + getPassword() + ", isBlock()=" + isBlock()
 				+ ", getDescriptionBlock()=" + getDescriptionBlock() + ", getNbre()=" + getNbre()
 				+ ", getDateNaissance()=" + getDateNaissance() + ", getPhoneNumber()=" + getPhoneNumber()
 				+ ", getPicture()=" + getPicture() + ", getUserName()=" + getUserName() + ", getRole()=" + getRole()
@@ -125,6 +133,17 @@ public class ConnectedUser extends User  implements Serializable{
 				+ getCreatedDate() + ", getUpdatedDate()=" + getUpdatedDate() + ", getClass()=" + getClass()
 				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	public ConnectedUser(String lieu, Set<tn.esprit.spring.entities.Reclamation> reclamation, Set<Comment> comments,
+			Set<tn.esprit.spring.entities.Appointment> appointment, List<Abonnement> abonnement) {
+		super();
+		this.lieu = lieu;
+		Reclamation = reclamation;
+		this.comments = comments;
+		Appointment = appointment;
+		this.abonnement = abonnement;
+	}
+	
+	
 	
 	
 

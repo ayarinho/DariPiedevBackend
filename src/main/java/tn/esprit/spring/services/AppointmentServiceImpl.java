@@ -1,8 +1,10 @@
 package tn.esprit.spring.services;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,18 +13,23 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+
 import io.jsonwebtoken.lang.Collections;
 import tn.esprit.spring.controller.UserRestController;
 
 import tn.esprit.spring.entities.Appointment;
 import tn.esprit.spring.entities.ConnectedUser;
+import tn.esprit.spring.entities.GeoIP;
 import tn.esprit.spring.entities.Reclamation;
 import tn.esprit.spring.repository.AppointmentRepository;
 
 import tn.esprit.spring.repository.ConnectedUserRepository;
+import tn.esprit.spring.repository.GeoIpRepository;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+	
 	@Autowired
 	AppointmentRepository AppointmentRepository;
 	@Autowired
@@ -30,6 +37,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Autowired
 	tn.esprit.spring.repository.ReclamationRepository ReclamationRepository;
 
+
+	
+	
 	private static final Logger l = LogManager.getLogger(AppointmentServiceImpl.class);
 
 	@Override
@@ -40,11 +50,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public synchronized String addAppointment(Appointment a, long idUser) { // en cas d'une meme utilisation de la section critique
+	public synchronized String addAppointment(Appointment a, long idUser) { 
+		
+		Calendar calendar = Calendar.getInstance();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
-		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll(); 
+		String DateSys = dateFormat.format(calendar.getTime());
+		String strDate = dateFormat.format(a.getDateAppointement());
+
+		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
 
 		ConnectedUser user = connectedUserRepository.findById(idUser).get();
+		
+		
+		
+
 
 		if (app.isEmpty()) {
 
@@ -57,11 +77,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 			for (Appointment ap : app) {
 
-				if (a.getHeure() == ap.getHeure()) {
+				if (a.getDateAppointement().getHours() == ap.getDateAppointement().getHours()) {
 
 					verifey = true;
 
-					return "We have un appointement in this hour";
+					return "There is an appointement in this hour";
+				}
+
+				if (strDate.compareTo(DateSys) < 0) {
+
+					verifey = true;
+
+					return "Date invalid is less than system date";
 				}
 			}
 
@@ -92,24 +119,22 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public String CancledAppointment(Date date, long idUser) {  //dakhel waket eli aamlet feha appointement pour annuler cette appoin
+	public String CancledAppointment(Date date, long idUser) {
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S"); // date with minute seconde et heure exacte 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
+		Calendar calendar = Calendar.getInstance();
+
+		String DateSys = dateFormat.format(calendar.getTime());
 		String strDate = dateFormat.format(date);
-	
-		l.info("ayarinhhhhhhhhhhhhhhhhhhhhhhhhhhho " + strDate);
 
 		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
 		ConnectedUser user = connectedUserRepository.findById(idUser).get();
 
 		for (Appointment a : app) {
 
-			l.info("dateeeeeeeeeeeeeee11 " + strDate);
-			l.info("dateeeeeeeeeeeeeee122222 " + a.getDateAppointement().toString());
-
-			if (a.getDateAppointement().toString().equals(strDate) && a.getUser() == user
-					&& a.getState() != "Canceled") {
+			if (a.getDateAppointement().toString().equals(strDate) && strDate.compareTo(DateSys) > 0
+					&& a.getUser() == user && a.getState() != "Canceled") {
 
 				a.setState("Canceled");
 				a.setAttendance("Absent");
@@ -119,7 +144,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 				return "Cancel Appointement succesed";
 
-			} 
+			}
 
 		}
 
@@ -131,7 +156,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 	public String ConfrmerAppointment(Date date, long idUser) {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+
+		Calendar calendar = Calendar.getInstance();
+
 		String strDate = dateFormat.format(date);
+		String DateSys = dateFormat.format(calendar.getTime());
 
 		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
 		ConnectedUser user = connectedUserRepository.findById(idUser).get();
@@ -139,7 +168,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		for (Appointment a : app) {
 
 			if (a.getDateAppointement().toString().equals(strDate) && a.getUser() == user
-					&& a.getState() != "Confirmed") {
+					&& strDate.compareTo(DateSys) > 0 && a.getState() != "Confirmed") {
 
 				a.setState("Confirmed");
 				a.setAttendance("Present");
@@ -149,12 +178,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 				return "Appointement is confirmed";
 
-			} 
+			}
 
 		}
 
 		return "Try to put the right date of your appointement";
 	}
-
+	
+	
+	
+	
 
 }

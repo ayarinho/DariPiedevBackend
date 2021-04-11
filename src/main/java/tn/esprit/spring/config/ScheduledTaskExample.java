@@ -29,6 +29,7 @@ import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.ReclamationRepository;
 import tn.esprit.spring.services.AppointmentService;
 import tn.esprit.spring.services.Filter;
+import tn.esprit.spring.services.MailService;
 
 @Configuration
 @EnableScheduling
@@ -36,14 +37,6 @@ public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAw
 
 	private static final Logger logger = Logger.getLogger(ScheduledTaskExample.class);
 
-	
-	
-	@Autowired
-
-	CommentRepository commentRepository;
-
-	@Autowired
-	Filter filter;
 
 	@Autowired
 	ReclamationRepository reclamationRepository;
@@ -55,10 +48,10 @@ public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAw
 	ConnectedUserRepository connectedRepository;
 
 	@Autowired
-	AppointmentService appointmentService;
-
-	@Autowired
 	AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	MailService mailService;
 
 	private ApplicationContext applicationContext;
 	private String beanName;
@@ -112,13 +105,6 @@ public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAw
 
 			System.out.println("Database is empty there is no appointements " + e.getMessage());
 
-			/*
-			 * appointmentRepository.save(new Appointment((long) 1, new Date(),
-			 * false, "Confirmed", 8, "present", false,
-			 * "appointement for verification", new Date(),
-			 * "ask admin for files", null));// ajout appointement bech base
-			 * to93edch fergha
-			 */
 
 		}
 	}

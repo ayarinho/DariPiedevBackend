@@ -34,6 +34,11 @@ public class Comment extends AuditTable<String>  implements Serializable {
 	private Boolean IsBlocked;
 
 	@JsonIgnore
+	@ManyToOne
+	private Ad Ads;
+	
+	
+	@JsonIgnore
 	@ManyToOne(/* cascade = CascadeType.ALL */)
 	ConnectedUser userId;
 

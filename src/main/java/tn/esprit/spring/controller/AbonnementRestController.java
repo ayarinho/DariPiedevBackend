@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.spring.entities.Abonnement;
+import tn.esprit.spring.entities.ConnectedUser;
+import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.services.AbonnementService;
+import tn.esprit.spring.specification.ConnectedUserSpec;
 
 
 
@@ -23,7 +27,8 @@ public class AbonnementRestController {
 
 	@Autowired
 	AbonnementService  abonnementService ;
-	
+	@Autowired
+	ConnectedUserRepository connectUserRepository;
 
 	@GetMapping("/get-Abonnes/{abonne_id}/{abonnement_id}")
 	@ResponseBody
@@ -40,6 +45,9 @@ public class AbonnementRestController {
 		return abonnementService.MesAbonnes(abonne_id);
 		
 	}
+	
+	
+	
 
 
 	@GetMapping("/Abonnements/{Abonnement_id}")
@@ -48,12 +56,15 @@ public class AbonnementRestController {
 		
 		return abonnementService.Abonnements(Abonnement_id);
 		
+		
 	}
 	
 	
+
+	
 	@GetMapping("/nombre-Abonnes/{abonne_id}")
 	@ResponseBody
-	public int NombreFollow(@PathVariable("abonne_id") Long abonne_id){
+	public Integer NombreFollow(@PathVariable("abonne_id") Long abonne_id){
 		
 		return abonnementService.nombreAbonnes(abonne_id);
 		

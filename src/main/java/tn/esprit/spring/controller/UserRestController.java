@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -20,6 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -163,13 +169,39 @@ public class UserRestController {
 	
 	
 	
-	@GetMapping("/connected-User/{firstname}")
+	@GetMapping("/getUserByFirstName/{firstname}")
 	@ResponseBody
 	public List<ConnectedUser> getAllUserByFirstnameWithSpecification(@PathVariable("firstname") String firstname){
 		
-		Specification<ConnectedUser> specifications=Specification.where(ConnectedUserSpec.hasFirstName(firstname));
+		Specification<ConnectedUser> specifications=Specification.where(iuserService.getUserByUsernameSpecifications(firstname));
 		
 		return connectUserRepository.findAll(specifications);
 		
 	}
+	
+	
+	@GetMapping("/getAllUserByComments/{id_comment}") // tout va recuperer liste user eli enty lawajtha bel idcomment
+	@ResponseBody
+	public List<ConnectedUser> getAllUserByCommentsSpecification(@PathVariable("id_comment")  long id_comment){
+		
+       Specification<ConnectedUser> specifications=Specification.where(ConnectedUserSpec.getAllUserByComments(id_comment));
+		
+		return connectUserRepository.findAll(specifications);
+		
+		
+	}
+	
+	
+
+	@GetMapping("/fetchAllUsersByUserName/{username}")
+	@ResponseBody
+	public List<Object>fetchAllUsersByUserName(@PathVariable("username") String username){
+		
+		return connectUserRepository.fetchAllUsersByUserName(username);
+		
+	}
+	
+	
 }
+
+

@@ -110,7 +110,6 @@ public class JwtFilter extends OncePerRequestFilter {
 					    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		

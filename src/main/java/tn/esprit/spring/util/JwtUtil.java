@@ -53,8 +53,8 @@ public class JwtUtil {
 
     
     public Date extractExpiration(String token)  {
-        return 
-        		extractClaim(token, Claims::getExpiration);
+        
+    	return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -71,7 +71,7 @@ public class JwtUtil {
     
     
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -97,6 +97,7 @@ public class JwtUtil {
     	
     	
         final String username = extractUsername(token);
+        
         try{
         	if(username != null){
         		

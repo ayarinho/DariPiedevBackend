@@ -20,17 +20,14 @@ import tn.esprit.spring.services.IUserService;
 @RestController
 public class commentRestControlleur{
 	
-@Autowired
+	@Autowired
 	
 	IUserService iuserService;
-	
-	
+
 	@Autowired
 	
 	IcommentService commentservice;
-	
-  
-	
+
 	@PostMapping("/add-Comment/{idUser}")
 	@ResponseBody
 	public Comment  AddComment(@RequestBody Comment  comment,@PathVariable("idUser") Long idUser ){

@@ -52,18 +52,14 @@ public class Appointment extends AuditTable<String> implements Serializable{
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 
-	//@Temporal(TemporalType.DATE)
 	private Date dateAppointement;
 	private boolean Visibility;
 	private String state;
-	private int Heure;
 	private String Attendance;
 	private boolean purchased;
 	private String justification;
 	
-	/*@Temporal(TemporalType.DATE)
-	private Date DatePurchasing; // date d'achat*/
-
+	
 	private String files; //dossier necessaire
 	
 	@JsonIgnore
@@ -71,12 +67,26 @@ public class Appointment extends AuditTable<String> implements Serializable{
 	ConnectedUser user;
 
 	
-	public Appointment() {
-		super();
-		// TODO Auto-generated constructor stub
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	Ad ad;
+
+	
+	
+	public Ad getAd() {
+		return ad;
 	}
 
-	public Appointment(Long idAppointement, Date dateAppointement, boolean visibility, String state, int heure,
+	public void setAd(Ad ad) {
+		this.ad = ad;
+	}
+
+	public Appointment() {
+		super();
+		
+	}
+
+	public Appointment(Long idAppointement, Date dateAppointement, boolean visibility, String state, 
 			String attendance, boolean purchased, String justification, String files,
 			ConnectedUser user) {
 		super();
@@ -84,7 +94,6 @@ public class Appointment extends AuditTable<String> implements Serializable{
 		this.dateAppointement = dateAppointement;
 		Visibility = visibility;
 		this.state = state;
-		Heure = heure;
 		Attendance = attendance;
 		this.purchased = purchased;
 		this.justification = justification;
@@ -125,13 +134,7 @@ public class Appointment extends AuditTable<String> implements Serializable{
 		this.state = state;
 	}
 
-	public int getHeure() {
-		return Heure;
-	}
-
-	public void setHeure(int heure) {
-		Heure = heure;
-	}
+	
 
 	public String getAttendance() {
 		return Attendance;
@@ -181,7 +184,7 @@ public class Appointment extends AuditTable<String> implements Serializable{
 	@Override
 	public String toString() {
 		return "Appointment [idAppointement=" + idAppointement + ", dateAppointement=" + dateAppointement
-				+ ", Visibility=" + Visibility + ", state=" + state + ", Heure=" + Heure + ", Attendance=" + Attendance
+				+ ", Visibility=" + Visibility + ", state=" + state  + ", Attendance=" + Attendance
 				+ ", purchased=" + purchased + ", justification=" + justification 
 				+ ", files=" + files + "]";
 	}

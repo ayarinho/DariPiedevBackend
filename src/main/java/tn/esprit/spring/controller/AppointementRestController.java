@@ -2,6 +2,7 @@ package tn.esprit.spring.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 
 import tn.esprit.spring.entities.Appointment;
 import tn.esprit.spring.services.AppointmentService;
@@ -56,7 +58,7 @@ public class AppointementRestController {
 
 	@PostMapping("/add-Appointment/{idUser}")
 	@ResponseBody
-	public String addAppointment(@RequestBody Appointment a, @PathVariable("idUser") Long idUser) {
+	public String addAppointment(@RequestBody Appointment a, @PathVariable("idUser") Long idUser) throws IOException, GeoIp2Exception {
 
 		return appoitmentService.addAppointment(a, idUser);
 	}
@@ -68,4 +70,6 @@ public class AppointementRestController {
 		return appoitmentService.getApp();
 	}
 
+
+	
 }

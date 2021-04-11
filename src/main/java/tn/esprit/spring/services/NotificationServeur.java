@@ -27,8 +27,8 @@ public class NotificationServeur {
 	
 
 
-	private final static String ACCOUNT_SID = "AC36259bd614d31cc9c7f3f6c4ab15a939";
-	private final static String AUTH_ID = "06020df39db37aa41b42d53ec9c8aefd";
+	private final static String ACCOUNT_SID = "ACbbd868782d368d6ede7f056e315ecf6d";
+	private final static String AUTH_ID = "8320740aa03667ee8d0cc0116fe3d25c";
    
 
 	
@@ -57,32 +57,25 @@ public class NotificationServeur {
 		
 		String pass=password;
 		
-		String cryptePassword=cryptWitSHA256.cryptWithSHA256(pass);
 		
-		System.out.println("avant base de donne "+cryptePassword);
-		
-		user.setPassword(cryptePassword);		
-		userRepository.save(user);
-		
-		System.out.println("apres base de donne "+cryptePassword);
-		System.out.println("base de donne "+user.getPassword());
 		
 		System.out.println(pass);
 		
 		//sending sms
 		
-		/*
+		String smsSender= "Welcome to Dari.tn this is your password : " +pass;
+		
 		 Twilio.init(ACCOUNT_SID,AUTH_ID);
 			
 		 Message message = Message.creator(new PhoneNumber(user.getPhoneNumber()),
-				 new PhoneNumber("+17378885488"),pass).create();
-		*/
+				 new PhoneNumber("+14254413140"),smsSender).create();
+		
 		//sending email
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
 		mail.setFrom("youssef.ayari1@esprit.tn");
-		mail.setSubject("youssef ");
-		mail.setText(pass);
+		mail.setSubject(user.getFirstName());
+		mail.setText("Welcome to Dari.tn this is your password : " +pass);
 		javaMailSender.send(mail);
 		System.out.println("apres mail"+user.getPassword());
 	}

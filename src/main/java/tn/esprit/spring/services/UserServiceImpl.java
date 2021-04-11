@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,11 +16,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -32,6 +44,7 @@ import tn.esprit.spring.entities.Role;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
+import tn.esprit.spring.specification.ConnectedUserSpec;
 import tn.esprit.spring.util.JwtUtil;
 
 @Service
@@ -53,6 +66,10 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	JwtUtil javautil;
+	
+	
+	@Autowired
+	ConnectedUserSpec spec;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -61,69 +78,63 @@ public class UserServiceImpl implements IUserService {
 
 		Role role = null;
 
-		client.setRole(role.Client);
+		Map<String, ConnectedUser> result = new HashMap<>();
 
-		Map<String, ConnectedUser> result = new HashMap<>(); // pour sortir
-																// resultata et
-																// client
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
 
-		notificationServeur.sendNotification(client);
+		boolean verifey = false;
 
-		String Pass = cryptaWithSHA256.cryptWithSHA256(password);
+		for (ConnectedUser us : users) {
 
-		client.setPassword(Pass);
+			if (client.getEmail().equals(us.getEmail())) {
 
-		userRepository.save(client);
+				verifey = true;
 
-		result.put("Success add client have Registred ", client);
+				result.put(us.getEmail() + " :exits deja dans la base de donner", null);
+
+			}
+
+			if (client.getUserName().equals(us.getUserName())) {
+
+				verifey = true;
+
+				result.put(us.getUserName() + " :exits deja dans la base de donner", null);
+
+			}
+			
+
+		}
+		
+		if (!checkString(password)) {
+
+			verifey = true;
+
+			result.put(" Password have 8 caracter upper lower and number", null);
+
+		}
+
+		if (!verifey) {
+
+			notificationServeur.sendNotification(client);
+			client.setRole(role.Client);
+
+			String Pass = cryptaWithSHA256.cryptWithSHA256(password);
+
+			client.setPassword(Pass);
+
+			userRepository.save(client);
+
+			result.put("Success add client have Registred ", client);
+
+			return result;
+
+		}
 
 		return result;
 
 	}
-
-	public void newUserConnected() {
-
-		long millis = System.currentTimeMillis();
-
-		java.sql.Date date = new java.sql.Date(millis);
-		System.out.println("ayarinhoooo   " + date.getDate());
-
-		int x = 0;
-
-		/*
-		 * List<ConnectedUser> tables
-		 * =(List<ConnectedUser>)userRepository.findAll();
-		 * 
-		 * 
-		 * 
-		 * Calendar calendar = Calendar.getInstance(); calendar.setTime(date);
-		 * int year=calendar.get(Calendar.YEAR); int
-		 * day=calendar.get(Calendar.DAY_OF_MONTH); int
-		 * month=calendar.get(Calendar.MONTH);
-		 * 
-		 * 
-		 * System.out.println(year+" "+day+" "+month);
-		 * 
-		 * 
-		 * for(ConnectedUser Cnnec:tables) { Calendar cal =
-		 * Calendar.getInstance(); cal.setTime(Cnnec.getToday()); int
-		 * year1=cal.get(Calendar.YEAR); int
-		 * day1=cal.get(Calendar.DAY_OF_MONTH); int
-		 * month1=cal.get(Calendar.MONTH);
-		 * System.out.println(year1+""+day1+""+month1);
-		 * 
-		 * if(year1==year && day1==day && month==month1 ) {
-		 * Cnnec.setNbrConnect(Cnnec.getNbrConnect()+1);
-		 * userRepository.save(Cnnec); x=10+x; }
-		 * 
-		 * 
-		 * 
-		 * } if(x==0) { ConnectedUser CU=new ConnectedUser(null,date,1);
-		 * 
-		 * userRepository.save(CU); }
-		 */
-
-	}
+	
+	
 
 	public ConnectedUser ajouterAdmin(ConnectedUser admin) {
 
@@ -253,6 +264,9 @@ public class UserServiceImpl implements IUserService {
 		}
 
 	}
+	
+	
+	
 
 	private static boolean checkString(String str) { // pour verifier 8 maj et
 														// min
@@ -312,6 +326,8 @@ public class UserServiceImpl implements IUserService {
 		}
 		return null;
 	}
+	
+	
 
 	@Override
 	public String deblockCompte(String email) {
@@ -384,6 +400,8 @@ public class UserServiceImpl implements IUserService {
 		}
 		return ".";
 	}
+	
+	
 
 	public User getUserByUsername(String username) { // teb3aa changer mdp pour
 														// recuperer utilisateur
@@ -392,6 +410,8 @@ public class UserServiceImpl implements IUserService {
 
 		return user;
 	}
+	
+	
 
 	public void SetPhotoByClient(String photo, Long idUser) {
 
@@ -402,6 +422,8 @@ public class UserServiceImpl implements IUserService {
 		userRepository.save(user);
 	}
 
+	
+	
 	public String DeleteConnectUser(long idUser) {
 
 		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
@@ -418,5 +440,34 @@ public class UserServiceImpl implements IUserService {
 		return "User is removed with success";
 
 	}
+	
+	 
+	
+	
+	////////////////////////////////Specifications//////////////////////////////////////////////
+	
+	
+	
+	public Specification<ConnectedUser> getUserByUsernameSpecifications(String fistname) {  // requette with specifications
+
+		return spec.hasFirstName(fistname);
+	}
+
+
+
+	public Specification<ConnectedUser> getAllUserByComments(long IdComment) { //requette with specifications
+
+		return spec.getAllUserByComments(IdComment);
+	}
+	
+	
+	
+	@Override
+	public List<Object> fetchAllUserByUserName(String username) { // ena eli mabonnehom
+
+		return userRepository.fetchAllUsersByUserName(username);
+	}
+
+
 
 }
