@@ -33,5 +33,14 @@ public class AnnonceRestController {
 		
 	}
 	
+	@GetMapping("/getDistance/{city}/{city1}")
+	@ResponseBody
+	public String distanceBetweenSellerAndBuyer(@PathVariable("city") String city,@PathVariable("city1") String city1) throws IOException, GeoIp2Exception, java.io.IOException{
+		
+		
+	double distance =annonceservice.distanceBetweenSellerAndBuyer(city, city1);
+	
+	return  distance + " km";
+	}
 	
 }

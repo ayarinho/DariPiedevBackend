@@ -77,7 +77,7 @@ public class AbonnementServiceImpl implements AbonnementService {
 
 			abonnementRepository.save(abonnement);
 
-			result.put("Abonnement with success  ", abonnement);
+			result.put("Abonnement with success  ", null);
 
 			return result;
 

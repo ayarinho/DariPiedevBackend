@@ -20,13 +20,13 @@ public class Abonnement implements Serializable{
 	private Long idF;  
 	
 	
- 	//@JsonIgnore
+ 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL) 
 	ConnectedUser Abonnes;
 	
  	
  	
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL) 
 	ConnectedUser Abonnements;
 	
@@ -67,10 +67,8 @@ public class Abonnement implements Serializable{
 	public void setAbonnements(ConnectedUser abonnements) {
 		Abonnements = abonnements;
 	}
-	@Override
-	public String toString() {
-		return "Abonnement [idF=" + idF + ", Abonnes=" + Abonnes + ", Abonnements=" + Abonnements + "]";
-	}
+	
+	
 
 	
 	

@@ -56,7 +56,7 @@ public class AnnonceServiceImpl implements IUannonceService {
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	    double distance = R * c * 1000; // convert to meters
 
-	    double height = 170000;   // hauteur   distance calculer selon latitde longitude et hauteur
+	    double height = 45000;   // hauteur   distance calculer selon latitde longitude et hauteur
 
 	    distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
@@ -69,7 +69,7 @@ public class AnnonceServiceImpl implements IUannonceService {
 	
 	
 	
-	public double distanceWIthSellerAndBuyer(String city,String city1) throws IOException, GeoIp2Exception, java.io.IOException{
+	public double distanceBetweenSellerAndBuyer(String city,String city1) throws IOException, GeoIp2Exception, java.io.IOException{
 		
 		  
 				GeoIP geo=	 geoService.findIpAddressByCityName(city);
@@ -103,11 +103,13 @@ public class AnnonceServiceImpl implements IUannonceService {
 		 
 		 for(Ad ad:ads){
 			 
-			  value=this.distanceWIthSellerAndBuyer(user.getLieu(), ad.getLocation());
+			  value=this.distanceBetweenSellerAndBuyer(user.getLieu(), ad.getLocation());
 			  
 			  
 			 list.put(value, ad);
 			 
+			 
+			 l.info("aaaaaaaaaaaaaa "+value);
 		
 		 }
 		 for (Map.Entry mapentry : list.entrySet()) {

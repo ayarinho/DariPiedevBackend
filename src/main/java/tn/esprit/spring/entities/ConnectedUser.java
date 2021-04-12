@@ -54,19 +54,14 @@ public class ConnectedUser extends User  implements Serializable{
 	@OneToMany( mappedBy="Abonnes" )
 	private List<Abonnement> abonnement;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="user")
-	private List<Ad> ads;
+
+	/*@OneToMany(mappedBy="user")
+	private List<Ad> ads;*/
 	
 	
 	
 
-	public List<Ad> getAds() {
-		return ads;
-	}
-	public void setAds(List<Ad> ads) {
-		this.ads = ads;
-	}
+	
 	public ConnectedUser( Set<tn.esprit.spring.entities.Reclamation> reclamation,
 			Set<Comment> comments, Set<tn.esprit.spring.entities.Appointment> appointment) {
 		super();

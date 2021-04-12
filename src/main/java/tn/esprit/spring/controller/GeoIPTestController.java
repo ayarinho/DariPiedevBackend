@@ -27,7 +27,8 @@ public class GeoIPTestController {
 	   public GeoIPTestController() throws IOException {
 	    	GeoIPLocationService = new  GeoServiceImpl();
 	    }
-	   //http://localhost:8085/GeoIPTest?City=161.185.160.93
+	   
+	   //http://localhost:8085/GeoIPTest?City=Bizerte
 	    
 	    @PostMapping("/GeoIPTest")
 	    public GeoIP getLocation(@RequestParam(value="City", required=true) String city) throws Exception {
