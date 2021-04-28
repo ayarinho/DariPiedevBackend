@@ -27,6 +27,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "T_AD")
 
@@ -66,13 +68,50 @@ public class Ad implements Serializable{
 		private float Price;
 	
 		
-		@ManyToOne
-		private ConnectedUser user;
+		@JsonIgnore
+		@ManyToOne(fetch=FetchType.LAZY)
+		ConnectedUser user;
 
 		@OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy="ad")
 		private Set<Appointment> Appointment;
 		
 	
+				public Ad(int idAd, int nbLikes, int nbDisLikes, String description, String image, String location, int area,
+				Date adDate, int viewsNumber, Boolean success, int score, List<Comment> comments, Date startDate,
+				Date endDate, float price, ConnectedUser user, Set<tn.esprit.spring.entities.Appointment> appointment,
+				int nbBaths, int nbRooms, int nbGarage, boolean terrace, boolean swimmingPool, boolean garden,
+				boolean airConditioning, boolean heater, boolean sousSol, boolean ascenseur, boolean furnished) {
+			super();
+			IdAd = idAd;
+			this.nbLikes = nbLikes;
+			this.nbDisLikes = nbDisLikes;
+			Description = description;
+			Image = image;
+			Location = location;
+			Area = area;
+			AdDate = adDate;
+			ViewsNumber = viewsNumber;
+			Success = success;
+			Score = score;
+			this.comments = comments;
+			StartDate = startDate;
+			EndDate = endDate;
+			Price = price;
+			this.user = user;
+			Appointment = appointment;
+			this.nbBaths = nbBaths;
+			this.nbRooms = nbRooms;
+			this.nbGarage = nbGarage;
+			Terrace = terrace;
+			SwimmingPool = swimmingPool;
+			Garden = garden;
+			AirConditioning = airConditioning;
+			this.heater = heater;
+			SousSol = sousSol;
+			this.ascenseur = ascenseur;
+			Furnished = furnished;
+		}
+
 				private int nbBaths;
 				private int nbRooms;
 				private int nbGarage;

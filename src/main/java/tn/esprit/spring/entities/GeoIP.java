@@ -16,8 +16,6 @@ public class GeoIP implements Serializable{
 	    private long id;
 	
 	
-
-
 		public GeoIP(long id, String ipAddress, String city, String latitude, String longitude) {
 		super();
 		this.id = id;

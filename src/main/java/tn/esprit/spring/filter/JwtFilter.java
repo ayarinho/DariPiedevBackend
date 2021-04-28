@@ -80,7 +80,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					userName = jwtUtil.extractUsername(token);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 		
             
@@ -110,7 +110,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 		
         }

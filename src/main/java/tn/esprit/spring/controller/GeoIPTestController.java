@@ -1,6 +1,8 @@
 package tn.esprit.spring.controller;
 import java.io.IOException;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 @RestController
+@CrossOrigin(origins="*", allowedHeaders = "*" )
 public class GeoIPTestController {
 	@Autowired
 	tn.esprit.spring.services.GeoIPLocationService GeoIPLocationService;
@@ -30,8 +33,8 @@ public class GeoIPTestController {
 	   
 	   //http://localhost:8085/GeoIPTest?City=Bizerte
 	    
-	    @PostMapping("/GeoIPTest")
-	    public GeoIP getLocation(@RequestParam(value="City", required=true) String city) throws Exception {
+	    @PostMapping("/GeoIPTest/{city}")
+	    public GeoIP getLocation(@PathVariable("city") String city) throws Exception {
 	    	
 	        tn.esprit.spring.services.GeoIPLocationService GeoIPlocationService= new GeoServiceImpl();
 	        

@@ -13,4 +13,7 @@ public interface IUannonceService {
 	public double distanceBetweenSellerAndBuyer(String city,String city1) throws IOException, GeoIp2Exception, java.io.IOException;
 	
 	public List<Ad> SortAnnonceByDistance(long idUser) throws IOException, GeoIp2Exception, java.io.IOException;
+	
+	
+	 public List<Ad> retrieveAllAds();
 }

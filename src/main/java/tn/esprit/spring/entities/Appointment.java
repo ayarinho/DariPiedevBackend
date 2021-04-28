@@ -172,6 +172,7 @@ public class Appointment extends AuditTable<String> implements Serializable{
 	public ConnectedUser getUser() {
 		return user;
 	}
+	
 
 	public void setUser(ConnectedUser user) {
 		this.user = user;

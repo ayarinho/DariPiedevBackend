@@ -12,9 +12,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +64,15 @@ public class AppointementRestController {
 
 		return appoitmentService.addAppointment(a, idUser);
 	}
+	
+	
+	@PutMapping("/updateAppointment/{idApp}")
+	@ResponseBody
+	public String updateAppointment(@RequestBody Appointment a, @PathVariable("idApp") Long idApp) {
+
+		return appoitmentService.updateAppointment(a, idApp);
+	}
+
 
 	@GetMapping("/getallAppoitement")
 	@ResponseBody
@@ -71,5 +82,51 @@ public class AppointementRestController {
 	}
 
 
+	@GetMapping("/getAppointement/{idApp}")
+	@ResponseBody
+	public Appointment getAppointementById(@PathVariable("idApp") Long idApp){
+		
+		
+		return appoitmentService.getAppointementById(idApp);
+	}
 	
+	
+	@GetMapping("/isVisibility/{idApp}")
+	@ResponseBody
+	public void isVisibility(@PathVariable("idApp") Long idApp){
+		
+		appoitmentService.isVisibility(idApp);
+		
+	}
+	
+	@GetMapping("/isNotVisibility/{idApp}")
+	@ResponseBody
+	public void isNotVisibility(@PathVariable("idApp") Long idApp){
+		
+		appoitmentService.isNotVisibility(idApp);
+	}
+	
+	@GetMapping("/isPurchase/{idApp}")
+	@ResponseBody
+	public void isPurchase(@PathVariable("idApp") Long idApp){
+		
+		appoitmentService.isPurchase(idApp);
+	}
+	
+	@GetMapping("/isNotPurchase/{idApp}")
+	@ResponseBody
+	public void isNotPurchase(@PathVariable("idApp") Long idApp){
+		
+		appoitmentService.isNotPurchase(idApp);
+		
+		
+	}
+	
+	@DeleteMapping("/deleteAppById/{idApp}")
+	@ResponseBody
+	public void deleteAppointementById(@PathVariable("idApp") Long idApp){
+		
+		appoitmentService.deleteAppointment(idApp);
+		
+	}
 }

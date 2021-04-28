@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 	public class FilesStorageServiceImpl implements Storageservice {
-	  private final Path root = Paths.get("C:\\Users\\user\\Documents\\workspace-sts-3.8.4.RELEASE\\PiedevDari\\uploads");
+	  private final Path root = Paths.get("C:\\Users\\user\\Desktop\\pfe\\Dari_front_end-main\\src\\assets\\uploads");
 	  @Override
 	  public void init() {
 	    try {

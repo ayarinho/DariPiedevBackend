@@ -72,6 +72,10 @@ public class UserServiceImpl implements IUserService {
 	ConnectedUserSpec spec;
 
 	@Autowired
+	SmsService smsService;
+
+	
+	@Autowired
 	AuthenticationManager authenticationManager;
 
 	public Map<String, ConnectedUser> ajouterClient(ConnectedUser client, String password) throws Exception {
@@ -82,6 +86,13 @@ public class UserServiceImpl implements IUserService {
 
 		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
 
+		String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"; // verification
+																						// mail
+
+		Pattern pattern = Pattern.compile(regex);
+
+		Matcher matcher = pattern.matcher(client.getEmail());
+
 		boolean verifey = false;
 
 		for (ConnectedUser us : users) {
@@ -90,7 +101,15 @@ public class UserServiceImpl implements IUserService {
 
 				verifey = true;
 
-				result.put(us.getEmail() + " :exits deja dans la base de donner", null);
+				result.put("Email exits deja dans la base de donner", null);
+
+			}
+			
+			if (!matcher.matches()) {
+				
+				verifey=true;
+
+				result.put("Invalid email", null);
 
 			}
 
@@ -98,7 +117,7 @@ public class UserServiceImpl implements IUserService {
 
 				verifey = true;
 
-				result.put(us.getUserName() + " :exits deja dans la base de donner", null);
+				result.put("Username exits deja dans la base de donner", null);
 
 			}
 			
@@ -109,13 +128,14 @@ public class UserServiceImpl implements IUserService {
 
 			verifey = true;
 
-			result.put(" Password have 8 caracter upper lower and number", null);
+			result.put("Password have 8 caracter upper lower and number", null);
 
 		}
 
 		if (!verifey) {
 
-			notificationServeur.sendNotification(client);
+			smsService.sendSMS(client);
+			
 			client.setRole(role.Client);
 
 			String Pass = cryptaWithSHA256.cryptWithSHA256(password);
@@ -384,18 +404,21 @@ public class UserServiceImpl implements IUserService {
 
 							userRepository.save(user);
 
-							return "password changer with succes";
+							return "Password changer with succes";
 						} else {
 
-							return "password have 8 caracter upper lower and number";
+							return "Password have 8 caracter upper lower and number";
 						}
 					} else {
-						return "the password not the same";
+						return "Password not the same";
 					}
 
 				} else {
-					return "password incorrect";
+					return "Password incorrect";
 				}
+			}else{
+				
+				return "Username does not exist";
 			}
 		}
 		return ".";
@@ -441,8 +464,141 @@ public class UserServiceImpl implements IUserService {
 
 	}
 	
+	public ConnectedUser updateUser(ConnectedUser connectedUser,long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setBlock(connectedUser.isBlock());
+		user.setDateNaissance(connectedUser.getDateNaissance());
+		user.setFirstName(connectedUser.getFirstName());
+		user.setLastName(connectedUser.getLastName());
+		user.setPassword(cryptaWithSHA256.cryptWithSHA256(connectedUser.getPassword()));
+		user.setUserName(connectedUser.getUserName());
+		user.setEmail(connectedUser.getEmail());
+		user.setPhoneNumber(connectedUser.getPhoneNumber());
+		user.setLieu(connectedUser.getLieu());
+		
+		userRepository.save(user);
+		
+		
+		return user;
+	}
+	
+	
+	public ConnectedUser updateProfileUser(ConnectedUser connectedUser,long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setDateNaissance(connectedUser.getDateNaissance());
+		user.setFirstName(connectedUser.getFirstName());
+		user.setLastName(connectedUser.getLastName());
+		user.setEmail(connectedUser.getEmail());
+		user.setPhoneNumber(connectedUser.getPhoneNumber());
+		user.setLieu(connectedUser.getLieu());
+		
+		userRepository.save(user);
+		
+		
+		return user;
+	}
+	
+	
+	public void isBlockedUser(long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setBlock(true);
+		
+		userRepository.save(user);
+
+		
+	}
+	
+	
+	public void isConnected(long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setIsConnected(true);
+		
+		userRepository.save(user);
+	}
+	
+
+	public void isDeonnected(long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setIsConnected(false);
+		
+		userRepository.save(user);
+	}
+	
+
+	
+	public long findIdByUserName(String userName){
+		
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+
+		
+		 for (ConnectedUser us:users){
+			 
+			 if(us.getUserName().equals(userName)){
+				 
+				 return us.getId();
+			 }
+		 }
+		 
+		 return 0L;
+		
+	}
+	
+	 
+	public ConnectedUser getUserByEmail(String email){
+		
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+
+		
+		 for (ConnectedUser us:users){
+			 
+			 if(us.getEmail().equals(email)){
+				 
+				 return us;
+			 }
+		 }
+		return null;
+	}
+	
+	
+	
+	public void isdeBlockedUser(long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		user.setBlock(false);
+		
+		userRepository.save(user);
+
+		
+	}
+	
+	
+	
+	public ConnectedUser getUserById(long idUser){
+		
+		ConnectedUser user= userRepository.findById(idUser).get();
+		
+		return user;
+		
+	}
 	 
 	
+	public List<ConnectedUser> getAllUsers(){
+		
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+
+		return users;
+	}
 	
 	////////////////////////////////Specifications//////////////////////////////////////////////
 	

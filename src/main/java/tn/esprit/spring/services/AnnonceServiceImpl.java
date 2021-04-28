@@ -124,4 +124,15 @@ public class AnnonceServiceImpl implements IUannonceService {
 
 	}
 	
+	
+	 public List<Ad> retrieveAllAds(){
+		 
+		    
+		 
+			List<Ad> ads = (List<Ad>) annonceRepository.findAll();
+			
+			return ads;
+	 }
+	 
+	
 }

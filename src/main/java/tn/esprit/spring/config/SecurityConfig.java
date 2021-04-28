@@ -88,7 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
    http.authorizeRequests()
    .antMatchers("/authentification/**","/add-user/**",
     			"/upload","/setPhoto/**","/getUser/**",
-    			"/changer-Password/**","/forget-Password/**","/debloquer-Compte/**")
+    			"/changer-Password/**","/forget-Password/**","/debloquer-Compte/**","/GeoIPTest/**","/getAllUsers"
+    			,"/getUserById/**" ,"/updateUser/**")
    		
    
         .permitAll()

@@ -2,6 +2,7 @@ package tn.esprit.spring.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import java.security.Principal;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.util.Date;
@@ -20,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +36,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +90,7 @@ public class UserRestController {
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
 	
+
 
 	@PostMapping("/add-user/{password}")
 	@ResponseBody
@@ -179,6 +185,22 @@ public class UserRestController {
 		
 	}
 	
+	@GetMapping("/blockedUser/{idUser}")
+	@ResponseBody
+	public void blockedUser(@PathVariable("idUser") long idUser){
+		
+		iuserService.isBlockedUser(idUser);
+		
+	}
+	
+	@GetMapping("/deblockedUser/{idUser}")
+	@ResponseBody
+	public void debblockedUser(@PathVariable("idUser") long idUser){
+		
+		iuserService.isdeBlockedUser(idUser);
+		
+	}
+	
 	
 	@GetMapping("/getAllUserByComments/{id_comment}") // tout va recuperer liste user eli enty lawajtha bel idcomment
 	@ResponseBody
@@ -202,6 +224,79 @@ public class UserRestController {
 	}
 	
 	
+
+	@DeleteMapping("/deleteUserById/{idUser}")
+	@ResponseBody
+	public String DeleteConnectUser(@PathVariable("idUser")  long idUser){
+		
+		return iuserService.DeleteConnectUser(idUser);
+	}
+	
+	
+	@GetMapping("/getUserById/{idUser}")
+	@ResponseBody
+	public ConnectedUser getUserById (@PathVariable("idUser")  long idUser){
+		
+		return iuserService.getUserById(idUser);
+	}
+	
+	
+	@PutMapping("/updateUser/{idUser}")
+	@ResponseBody
+	public ConnectedUser updateUser(@RequestBody ConnectedUser user ,@PathVariable("idUser")  long idUser){
+		
+		return iuserService.updateUser(user, idUser);
+	}
+	
+
+	@GetMapping("/getAllUsers")
+	@ResponseBody
+	public List<ConnectedUser> getAllUsers(){
+		
+		return iuserService.getAllUsers();
+	}
+	
+	
+	@GetMapping("/getUsersByEmail/{email}")
+	@ResponseBody
+	public ConnectedUser getUserByEmail(@PathVariable("email")  String email){
+		
+		return iuserService.getUserByEmail(email);
+		
+	}
+	
+	@GetMapping("/isConnected/{idUser}")
+	@ResponseBody
+	public void isConnected(@PathVariable("idUser")  long idUser){
+		
+		iuserService.isConnected(idUser);
+	}
+	
+	
+	@GetMapping("/isDonnected/{idUser}")
+	@ResponseBody
+	public void isDeonnected(@PathVariable("idUser")  long idUser){
+		
+		iuserService.isDeonnected(idUser);
+		
+	}
+	
+	@GetMapping("/findIdByUserName/{userName}")
+	@ResponseBody
+	public long findIdByUserName(@PathVariable("userName")  String userName){
+		
+		return iuserService.findIdByUserName(userName);
+	}
+
+	
+	@PutMapping("/updateProfileUser/{idUser}")
+	@ResponseBody
+	public ConnectedUser updateProfileUser(@RequestBody ConnectedUser user ,@PathVariable("idUser")  long idUser){
+		
+		return iuserService.updateProfileUser(user, idUser);
+
+	}
+
 }
 
 

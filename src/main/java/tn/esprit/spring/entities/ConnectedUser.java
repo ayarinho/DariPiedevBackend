@@ -40,7 +40,15 @@ public class ConnectedUser extends User  implements Serializable{
 
 	private String lieu;
 	
+	private Boolean isConnected;
 	
+	
+	public Boolean getIsConnected() {
+		return isConnected;
+	}
+	public void setIsConnected(Boolean isConnected) {
+		this.isConnected = isConnected;
+	}
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
 	private Set<Reclamation> Reclamation;
 	
@@ -55,13 +63,29 @@ public class ConnectedUser extends User  implements Serializable{
 	private List<Abonnement> abonnement;
 	
 
-	/*@OneToMany(mappedBy="user")
-	private List<Ad> ads;*/
+	@OneToMany(cascade = CascadeType.REMOVE,mappedBy="user")
+	private List<Ad> ads;
 	
 	
 	
 
 	
+	public ConnectedUser(String lieu, Set<tn.esprit.spring.entities.Reclamation> reclamation, Set<Comment> comments,
+			Set<tn.esprit.spring.entities.Appointment> appointment, List<Abonnement> abonnement, List<Ad> ads) {
+		super();
+		this.lieu = lieu;
+		Reclamation = reclamation;
+		this.comments = comments;
+		Appointment = appointment;
+		this.abonnement = abonnement;
+		this.ads = ads;
+	}
+	public List<Ad> getAds() {
+		return ads;
+	}
+	public void setAds(List<Ad> ads) {
+		this.ads = ads;
+	}
 	public ConnectedUser( Set<tn.esprit.spring.entities.Reclamation> reclamation,
 			Set<Comment> comments, Set<tn.esprit.spring.entities.Appointment> appointment) {
 		super();

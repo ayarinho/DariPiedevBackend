@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Enumerated;
@@ -49,10 +50,9 @@ public abstract class User extends AuditTable<String> implements Serializable { 
 	private String FirstName;
 	private String LastName;
 	
-	@javax.validation.constraints.Email(message="email n'est valid syntaxiquement")
-	@NotNull
+	/*@javax.validation.constraints.Email(message="email n'est valid syntaxiquement")
+	@NotNull*/
     private String Email;
-
 	private String Password;
 	private boolean block;
 	private String DescriptionBlock;
@@ -61,6 +61,7 @@ public abstract class User extends AuditTable<String> implements Serializable { 
 	private Date dateNaissance;
 	private String phoneNumber;
 	private String picture;
+	
 	private String userName;
 	@Enumerated
 	private Role role;

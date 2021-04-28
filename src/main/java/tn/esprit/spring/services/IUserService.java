@@ -28,4 +28,24 @@ public interface IUserService {
 
 	public List<Object> fetchAllUserByUserName(String username);
 	
+	public List<ConnectedUser> getAllUsers();
+	
+	public ConnectedUser updateUser(ConnectedUser connectedUser,long idUser);
+	
+	public ConnectedUser getUserById(long idUser);
+	
+	public void isBlockedUser(long idUser);
+	
+	public void isdeBlockedUser(long idUser);
+	
+	public ConnectedUser getUserByEmail(String email);
+	
+	public void isConnected(long idUser);
+	
+	public void isDeonnected(long idUser);
+	
+	public long findIdByUserName(String userName);
+	
+	public ConnectedUser updateProfileUser(ConnectedUser connectedUser,long idUser);
+	
 }

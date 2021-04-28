@@ -31,9 +31,9 @@ import tn.esprit.spring.services.AppointmentService;
 import tn.esprit.spring.services.Filter;
 import tn.esprit.spring.services.MailService;
 
-@Configuration
-@EnableScheduling
-public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAware {
+//@Configuration
+//@EnableScheduling
+/*public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAware {
 
 	private static final Logger logger = Logger.getLogger(ScheduledTaskExample.class);
 
@@ -56,7 +56,7 @@ public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAw
 	private ApplicationContext applicationContext;
 	private String beanName;
 
-	@Scheduled(fixedDelay = 30000)
+	/*@Scheduled(fixedDelay = 30000)
 	@Async
 	public void someTask() { // alkhater base twali ferghaa beleeek
 
@@ -123,5 +123,5 @@ public class ScheduledTaskExample implements ApplicationContextAware, BeanNameAw
 	@Override
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
-	}
-}
+	}*/
+//}

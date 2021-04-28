@@ -43,4 +43,11 @@ public class AnnonceRestController {
 	return  distance + " km";
 	}
 	
+	
+	@GetMapping("/getAllAds")
+	@ResponseBody
+	 public List<Ad> retrieveAllAds(){
+		 
+		 return annonceservice.retrieveAllAds();
+	 }
 }

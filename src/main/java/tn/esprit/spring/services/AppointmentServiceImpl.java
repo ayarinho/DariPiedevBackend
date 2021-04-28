@@ -61,10 +61,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
 
 		ConnectedUser user = connectedUserRepository.findById(idUser).get();
-		
-		
-		
-
+	
 
 		if (app.isEmpty()) {
 
@@ -74,6 +71,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 		} else {
 
 			boolean verifey = false;
+			
+			
 
 			for (Appointment ap : app) {
 
@@ -102,7 +101,61 @@ public class AppointmentServiceImpl implements AppointmentService {
 			}
 
 		}
-		return "Nothing";
+		return "Appointement added with success";
+	}
+	
+	
+	
+	@Override
+	public synchronized String updateAppointment(Appointment a, long idApp) { 
+		
+		Calendar calendar = Calendar.getInstance();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+
+		String DateSys = dateFormat.format(calendar.getTime());
+		String strDate = dateFormat.format(a.getDateAppointement());
+
+		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
+
+		Appointment appt = AppointmentRepository.findById(idApp).get();
+	
+
+			boolean verifey = false;
+
+			for (Appointment ap : app) {
+
+				if (a.getDateAppointement().getHours() == ap.getDateAppointement().getHours()) {
+
+					verifey = true;
+
+					return "There is an appointement in this hour";
+				}
+
+				if (strDate.compareTo(DateSys) < 0) {
+
+					verifey = true;
+
+					return "Date invalid is less than system date";
+				}
+			}
+
+			if (!verifey) {
+
+ 
+				appt.setVisibility(a.isVisibility());
+				appt.setDateAppointement(a.getDateAppointement());
+				appt.setPurchased(a.isPurchased());
+                appt.setJustification(a.getJustification());
+                appt.setState(a.getState());
+                
+				
+				AppointmentRepository.save(appt);
+
+				return "Appointement updated with success";
+			}
+
+		
+		return "Appointement updated with success";
 	}
 
 	@Override
@@ -110,6 +163,47 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 		AppointmentRepository.deleteById(idUser);
 
+	}
+	
+	public void isVisibility(long idApp){
+
+		Appointment app = AppointmentRepository.findById(idApp).get();
+		
+		app.setVisibility(true);
+		
+		AppointmentRepository.save(app);
+          
+	}
+	
+	public void isNotVisibility(long idApp){
+
+		Appointment app = AppointmentRepository.findById(idApp).get();
+		
+		app.setVisibility(false);
+		
+		AppointmentRepository.save(app);
+          
+	}
+	
+	public void isPurchase(long idApp){
+
+		Appointment app = AppointmentRepository.findById(idApp).get();
+		
+		app.setPurchased(true);
+		
+		AppointmentRepository.save(app);
+          
+	}
+	
+	
+	public void isNotPurchase(long idApp){
+
+		Appointment app = AppointmentRepository.findById(idApp).get();
+		
+		app.setPurchased(false);		
+		
+		AppointmentRepository.save(app);
+          
 	}
 
 	@Override
@@ -123,9 +217,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
-		Calendar calendar = Calendar.getInstance();
-
-		String DateSys = dateFormat.format(calendar.getTime());
 		String strDate = dateFormat.format(date);
 
 		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
@@ -133,7 +224,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 		for (Appointment a : app) {
 
-			if (a.getDateAppointement().toString().equals(strDate) && strDate.compareTo(DateSys) > 0
+			if (a.getDateAppointement().toString().equals(strDate) 
 					&& a.getUser() == user && a.getState() != "Canceled") {
 
 				a.setState("Canceled");
@@ -157,18 +248,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
-		Calendar calendar = Calendar.getInstance();
 
 		String strDate = dateFormat.format(date);
-		String DateSys = dateFormat.format(calendar.getTime());
+		
 
 		List<Appointment> app = (List<Appointment>) AppointmentRepository.findAll();
 		ConnectedUser user = connectedUserRepository.findById(idUser).get();
 
 		for (Appointment a : app) {
 
-			if (a.getDateAppointement().toString().equals(strDate) && a.getUser() == user
-					&& strDate.compareTo(DateSys) > 0 && a.getState() != "Confirmed") {
+			if (a.getDateAppointement().toString().equals(strDate) && a.getUser() == user && a.getState() != "Confirmed") {
 
 				a.setState("Confirmed");
 				a.setAttendance("Present");
@@ -187,6 +276,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 	
 	
 	
-	
+	public Appointment getAppointementById(long idApp){
+		
+		Appointment app=AppointmentRepository.findById(idApp).get();
+		
+		return app;
+	}
 
 }

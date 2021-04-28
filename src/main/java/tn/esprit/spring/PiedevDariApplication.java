@@ -18,7 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.security.web.session.HttpSessionCreatedEvent;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import ch.qos.logback.classic.Level;
 import tn.esprit.spring.audit.AuditorAwareImpl;
@@ -41,12 +43,9 @@ public class PiedevDariApplication {
 	public static final Logger Logger=LogManager.getLogger(PiedevDariApplication.class);
 
 
-	
-	
 	public static void main(String[] args) throws IOException, Exception {
 		SpringApplication.run(PiedevDariApplication.class, args);
 	
-		
 	        
 } 
 	

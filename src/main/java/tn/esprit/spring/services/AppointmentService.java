@@ -24,6 +24,21 @@ public interface AppointmentService {
 	
 	public List<Appointment> getApp();
 	
+	public Appointment getAppointementById(long idApp);
+	
+	public String updateAppointment(Appointment a, long idApp);
+	
+	public void isVisibility(long idApp);
+	
+	public void isNotVisibility(long idApp);
+	
+	public void isPurchase(long idApp);
+	
+	public void isNotPurchase(long idApp);
+	
+	
+
+	
 
 
 }

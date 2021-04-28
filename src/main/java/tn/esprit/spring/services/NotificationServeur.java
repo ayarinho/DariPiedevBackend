@@ -25,12 +25,6 @@ public class NotificationServeur {
 	@Autowired
 	CryptWithSHA256 cryptWitSHA256;
 	
-
-
-	private final static String ACCOUNT_SID = "ACbbd868782d368d6ede7f056e315ecf6d";
-	private final static String AUTH_ID = "8320740aa03667ee8d0cc0116fe3d25c";
-   
-
 	
 	public NotificationServeur(JavaMailSender javaMAilSender) {
 		this.javaMailSender = javaMailSender;
@@ -57,18 +51,15 @@ public class NotificationServeur {
 		
 		String pass=password;
 		
+		String cryptePassword=cryptWitSHA256.cryptWithSHA256(pass);
 		
+		System.out.println("avant base de donne "+cryptePassword);
+		
+		user.setPassword(cryptePassword);		
+		userRepository.save(user);
 		
 		System.out.println(pass);
 		
-		//sending sms
-		
-		String smsSender= "Welcome to Dari.tn this is your password : " +pass;
-		
-		 Twilio.init(ACCOUNT_SID,AUTH_ID);
-			
-		 Message message = Message.creator(new PhoneNumber(user.getPhoneNumber()),
-				 new PhoneNumber("+14254413140"),smsSender).create();
 		
 		//sending email
 		SimpleMailMessage mail = new SimpleMailMessage();
