@@ -9,10 +9,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,11 +36,12 @@ public class Comment extends AuditTable<String>  implements Serializable {
 
 	private Boolean IsBlocked;
 
+	@JoinColumn(name="ad_idC")
 	@JsonIgnore
 	@ManyToOne
 	private Ad Ads;
-	
-	
+
+	@JoinColumn(name="user_idC")
 	@JsonIgnore
 	@ManyToOne(/* cascade = CascadeType.ALL */)
 	ConnectedUser userId;
@@ -45,6 +49,7 @@ public class Comment extends AuditTable<String>  implements Serializable {
 	@JsonIgnore
 	@OneToMany(/* cascade = CascadeType.ALL, */ mappedBy = "commentaire")
 	private Set<Reclamation> reclamations;
+
 
 	public Long getIdComment() {
 		return IdComment;

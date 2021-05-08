@@ -16,7 +16,7 @@ public interface AppointmentService {
 	
 	public  String addAppointment(Appointment a, long idUser) throws IOException, GeoIp2Exception;
 
-	void deleteAppointment(long id);
+	public String deleteAppointment(long id);
 	
 	public String ConfrmerAppointment(Date date , long idUser);
 

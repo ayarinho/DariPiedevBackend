@@ -40,9 +40,11 @@ import com.twilio.type.PhoneNumber;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import tn.esprit.spring.entities.ConnectedUser;
+import tn.esprit.spring.entities.Notification;
 import tn.esprit.spring.entities.Role;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.ConnectedUserRepository;
+import tn.esprit.spring.repository.NotificationRepository;
 import tn.esprit.spring.repository.UserRepository;
 import tn.esprit.spring.specification.ConnectedUserSpec;
 import tn.esprit.spring.util.JwtUtil;
@@ -74,6 +76,8 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	SmsService smsService;
 
+	@Autowired
+	NotificationRepository notificationRepository;
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -599,6 +603,67 @@ public class UserServiceImpl implements IUserService {
 
 		return users;
 	}
+	
+	
+	
+	/******************Notifcation pour register user service******************/
+	
+	public String  addUserNotifcation(long idUser){
+		
+		ConnectedUser user =  userRepository.findById(idUser).get();
+
+		
+		Notification notif = new Notification();
+		notif.setUser(user);
+		
+		
+		notificationRepository.save(notif);
+		
+		return "added notif with success";
+	
+	}
+	
+	
+	public List<ConnectedUser> getAllNotifications(){
+		
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+
+		List<Notification> notif = (List<Notification>) notificationRepository.findAll();
+		
+		List<ConnectedUser> list = new ArrayList<>();
+		
+		  for(ConnectedUser us: users){
+			  
+			   for(Notification ns:notif){ 
+				   if(us.getId() == ns.getUser().getId()){
+					
+					   list.add(us);
+					 
+					  
+				   }
+			   }
+		  }
+		  return list;
+	}
+	
+	
+	public String  deleteNotifById(long idNotif){
+		
+		List<Notification> notifs = (List<Notification>) notificationRepository.findAll();
+
+		if (notifs.isEmpty()) {
+
+			return "There is no notifications in database";
+		} else {
+
+			notificationRepository.deleteById(idNotif);
+
+		}
+
+		return "Notification is removed with success";
+
+	}
+	
 	
 	////////////////////////////////Specifications//////////////////////////////////////////////
 	

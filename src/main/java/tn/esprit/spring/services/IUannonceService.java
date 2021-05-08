@@ -16,4 +16,6 @@ public interface IUannonceService {
 	
 	
 	 public List<Ad> retrieveAllAds();
+	 
+	 public String DeleteAd(long idAd) ;
 }

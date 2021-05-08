@@ -46,6 +46,14 @@ public interface IUserService {
 	
 	public long findIdByUserName(String userName);
 	
+	
+	public String  addUserNotifcation(long idUser);
+	
 	public ConnectedUser updateProfileUser(ConnectedUser connectedUser,long idUser);
+	
+	
+	public List<ConnectedUser> getAllNotifications();
+	
+	public String deleteNotifById(long idNotif);
 	
 }

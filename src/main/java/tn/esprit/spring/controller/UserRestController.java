@@ -297,6 +297,30 @@ public class UserRestController {
 
 	}
 
+
+	@GetMapping("/adduserNotif/{idUser}")
+	@ResponseBody
+	public String  addUserNotifcation(@PathVariable("idUser")  long idUser){
+		
+		return iuserService.addUserNotifcation(idUser);
+		
+	}
+	
+	@GetMapping("/getUserByNotification")
+	@ResponseBody
+	public List<ConnectedUser> getAllNotifications(){
+		
+		return iuserService.getAllNotifications();
+				
+	}
+	
+	@DeleteMapping("/deleteNotifById/{idNotif}")
+	@ResponseBody
+	public String deleteAllNotif(@PathVariable("idNotif")  long idNotif){
+		
+		return iuserService.deleteNotifById(idNotif);
+	}
+	
 }
 
 

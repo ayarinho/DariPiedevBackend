@@ -1,6 +1,9 @@
 package tn.esprit.spring.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import tn.esprit.spring.entities.Comment;
 import tn.esprit.spring.entities.ConnectedUser;
+import tn.esprit.spring.entities.Notification;
 import tn.esprit.spring.entities.Reclamation;
 import tn.esprit.spring.entities.User;
 import tn.esprit.spring.repository.CommentRepository;
 import tn.esprit.spring.repository.ConnectedUserRepository;
+import tn.esprit.spring.repository.NotificationRepository;
 import tn.esprit.spring.repository.ReclamationRepository;
 
 import tn.esprit.spring.repository.UserRepository;
@@ -37,7 +42,10 @@ public class ReclamationServiceImpl implements ReclamationService {
 
 	@Autowired
 	CommentRepository commentrepository;
-
+	
+	@Autowired
+    NotificationRepository notificationRepository ; 
+	
 	private static final Logger l = LogManager.getLogger(ReclamationServiceImpl.class);
 
 	@Override
@@ -113,9 +121,11 @@ public class ReclamationServiceImpl implements ReclamationService {
 			l.info("badwordsss   " + output);
 
 			Reclamation reclamation = new Reclamation("user post in comments bad words !! ", user, comment);
-
+			
+			
 			reclamationRepository.save(reclamation);
-
+		
+			
 			for (Reclamation recc : Reclamations) {
 
 				if (recc.getUserId().getId() == Long.parseLong(iduser)
@@ -143,7 +153,8 @@ public class ReclamationServiceImpl implements ReclamationService {
 				blockedComment.setIsBlocked(true);
 
 				blockedComment.setDescriptionComment(output);
-
+			    
+				
 				commentrepository.save(blockedComment);
 
 				userRepository.save(blockeduser);
@@ -162,5 +173,37 @@ public class ReclamationServiceImpl implements ReclamationService {
 		}
 
 	}
+	
+	
+   /*public Map<String, String> getAllReclamationsByNotifAndUser(){
+		
+		/*List<Reclamation> reclms = (List<Reclamation>) reclamationRepository.findAll();
+
+		List<Notification> notif = (List<Notification>) notificationRepository.findAll();
+		
+		List<ConnectedUser> users = (List<ConnectedUser>) userRepository.findAll();
+
+		
+		Map<String, String> list = new HashMap<String, String>();
+		
+		  for(Reclamation rc: reclms){
+			  
+			   for(Notification ns:notif){ 
+				   for(ConnectedUser us : users){
+				    
+				   if(rc.getId() == ns.getReclamation().getId() && 
+						   us.getId() == ns.getUser().getId() ){
+					
+			
+					   list.put(us.getUserName(),us.getPicture());
+					 
+					  
+				   }
+			     }
+			   }
+		  }
+		  return list;
+	}
+	*/
 
 }

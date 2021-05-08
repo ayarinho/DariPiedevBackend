@@ -124,9 +124,9 @@ public class AppointementRestController {
 	
 	@DeleteMapping("/deleteAppById/{idApp}")
 	@ResponseBody
-	public void deleteAppointementById(@PathVariable("idApp") Long idApp){
+	public String deleteAppointementById(@PathVariable("idApp") Long idApp){
 		
-		appoitmentService.deleteAppointment(idApp);
+		return appoitmentService.deleteAppointment(idApp);
 		
 	}
 }

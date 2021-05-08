@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -39,7 +40,7 @@ public class Ad implements Serializable{
         
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
-		private int IdAd;
+		private Long IdAd;
 		private int nbLikes;
 		private int nbDisLikes;
 		private String Description;
@@ -56,8 +57,6 @@ public class Ad implements Serializable{
 		private int Score;
 		@Enumerated(EnumType.STRING)
 	
-		@OneToMany(mappedBy = "Ads",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-		private List<Comment> comments;
 		
 		
 		@Temporal(TemporalType.DATE)
@@ -67,16 +66,19 @@ public class Ad implements Serializable{
 		
 		private float Price;
 	
+		@OneToMany(mappedBy = "Ads",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+		private List<Comment> comments;
 		
+		@JoinColumn(name="user_idAd")
 		@JsonIgnore
 		@ManyToOne(fetch=FetchType.LAZY)
 		ConnectedUser user;
 
-		@OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy="ad")
+		@OneToMany(/*cascade = CascadeType.ALL,*/ mappedBy = "ad",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 		private Set<Appointment> Appointment;
 		
 	
-				public Ad(int idAd, int nbLikes, int nbDisLikes, String description, String image, String location, int area,
+				public Ad(long idAd, int nbLikes, int nbDisLikes, String description, String image, String location, int area,
 				Date adDate, int viewsNumber, Boolean success, int score, List<Comment> comments, Date startDate,
 				Date endDate, float price, ConnectedUser user, Set<tn.esprit.spring.entities.Appointment> appointment,
 				int nbBaths, int nbRooms, int nbGarage, boolean terrace, boolean swimmingPool, boolean garden,
@@ -128,11 +130,11 @@ public class Ad implements Serializable{
 				
 				private boolean Furnished;// cet attribut uniquement pour les annonce de location c'est à dire meublé ou nn
 
-				public int getIdAd() {
+				public Long getIdAd() {
 					return IdAd;
 				}
 
-				public void setIdAd(int idAd) {
+				public void setIdAd(Long idAd) {
 					IdAd = idAd;
 				}
 
@@ -356,7 +358,7 @@ public class Ad implements Serializable{
 					return serialVersionUID;
 				}
 
-				public Ad(int idAd, int nbLikes, int nbDisLikes, String description, String image, String location,
+				public Ad(long idAd, int nbLikes, int nbDisLikes, String description, String image, String location,
 						int area, Date adDate, int viewsNumber, Boolean success, int score, List<Comment> comments,
 						ConnectedUser user, Date startDate, Date endDate, float price,
 						Set<tn.esprit.spring.entities.Appointment> appointment, int nbBaths, int nbRooms, int nbGarage,

@@ -125,6 +125,30 @@ public class AnnonceServiceImpl implements IUannonceService {
 	}
 	
 	
+	
+	
+	
+
+	public String DeleteAd(long idAd) {
+
+		List<Ad> ads = (List<Ad>) annonceRepository.findAll();
+
+		if (ads.isEmpty()) {
+
+			return "There is no ads in database";
+		} else {
+
+			annonceRepository.deleteById(idAd);
+
+		}
+
+		return "Ad is removed with success";
+
+	}
+	
+	
+	
+	
 	 public List<Ad> retrieveAllAds(){
 		 
 		    

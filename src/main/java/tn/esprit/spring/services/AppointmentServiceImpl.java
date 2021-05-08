@@ -159,11 +159,27 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public void deleteAppointment(long idUser) {
+	public String deleteAppointment(long idUser) {
 
-		AppointmentRepository.deleteById(idUser);
+		List<Appointment> apps = (List<Appointment>) AppointmentRepository.findAll();
+
+		if (apps.isEmpty()) {
+
+			return "There is no apps in database";
+		} else {
+
+			AppointmentRepository.deleteById(idUser);
+
+		}
+
+		return "Appointement is removed with success";
 
 	}
+	
+		
+	
+
+	
 	
 	public void isVisibility(long idApp){
 
