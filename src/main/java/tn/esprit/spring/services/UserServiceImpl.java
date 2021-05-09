@@ -396,8 +396,8 @@ public class UserServiceImpl implements IUserService {
 
 		for (ConnectedUser user : users) {
 
-			if (user.getUserName().equals(username)) {
-
+			if (user.getUserName().equals(username)) { // lezmou iddour fel for koll pour trouver userName pas d'interuption with return
+				
 				if (user.getPassword().equals(cryptaWithSHA256.cryptWithSHA256(OldPassword))) {
 
 					if (newPassword.equals(password)) {
@@ -420,12 +420,9 @@ public class UserServiceImpl implements IUserService {
 				} else {
 					return "Password incorrect";
 				}
-			}else{
-				
-				return "Username does not exist";
 			}
 		}
-		return ".";
+		return "Username does not exist";
 	}
 	
 	
