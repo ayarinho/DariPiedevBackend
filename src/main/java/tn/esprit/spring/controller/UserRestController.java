@@ -56,7 +56,7 @@ import tn.esprit.spring.repository.ConnectedUserRepository;
 import tn.esprit.spring.repository.UserRepository;
 import tn.esprit.spring.services.AppointmentService;
 import tn.esprit.spring.services.CustomUserDetailsService;
-
+import tn.esprit.spring.services.IMailService;
 import tn.esprit.spring.services.IUserService;
 import tn.esprit.spring.services.ReclamationService;
 import tn.esprit.spring.services.Storageservice;
@@ -86,6 +86,10 @@ public class UserRestController {
 	@Autowired
 	
 	 ConnectedUserRepository connectUserRepository ;
+	
+	@Autowired
+	
+	 IMailService imailService ;
 	
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
@@ -321,6 +325,15 @@ public class UserRestController {
 		return iuserService.deleteNotifById(idNotif);
 	}
 	
+	
+	
+	@GetMapping("/getAllEmailReceived")
+	@ResponseBody
+	public Map<String,List<Object>> receiveEails() throws Exception{
+		
+		return imailService.receiveEmail( "imap.gmail.com", "imap", "youssef.ayari1@esprit.tn", "Ayarinhomessinho12");
+				
+	}
 }
 
 

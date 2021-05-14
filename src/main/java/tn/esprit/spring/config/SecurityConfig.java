@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     			"/upload","/setPhoto/**","/getUser/**",
     			"/changer-Password/**","/forget-Password/**","/debloquer-Compte/**","/GeoIPTest/**","/getAllUsers"
     			,"/getUserById/**" ,"/updateUser/**","/getUsersByEmail/**","/adduserNotif/**","/getUserByNotification",
-    			"/bad-words/**","/getAllReclamationsByNotifAndUser")
+    			"/bad-words/**","/getAllReclamationsByNotifAndUser","/getAllEmailReceived")
    		
    
         .permitAll()
